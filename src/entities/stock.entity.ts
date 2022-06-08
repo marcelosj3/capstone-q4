@@ -1,4 +1,6 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, ManyToOne, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Product } from "./product.entity";
+import { Supplier } from "./supplier.entity";
 
 
 @Entity("stocks")
@@ -17,4 +19,10 @@ export class Stock {
 
     @Column({default: true})
     isAvailable: boolean;
+
+    @OneToOne(() => Product, (product) => product.stock)
+    product: Product
+
+    @ManyToOne(() => Supplier, (supplier) => supplier.stock)
+    supplier: Supplier
 }

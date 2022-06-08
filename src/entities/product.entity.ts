@@ -1,5 +1,7 @@
-import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, ManyToOne, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { CartProduct } from "./cartProduct.entity";
+import { Commerce } from "./commerce.entity";
+import { Stock } from "./stock.entity";
 
 
 @Entity("products")
@@ -27,5 +29,12 @@ export class Product {
 
     @OneToOne(() => CartProduct, (cartProduct) => cartProduct.product)
     cartProduct: CartProduct
+
+    @OneToOne(() => Stock, (stock) => stock.product)
+    @JoinColumn()
+    stock: Stock
+
+    @ManyToOne(() => Commerce, (commerce) => commerce.products)
+    commerce: Commerce
 
 }

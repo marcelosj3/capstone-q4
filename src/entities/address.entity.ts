@@ -1,6 +1,7 @@
-import { Column, Entity, ManyToMany, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, ManyToMany, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { boolean } from "yup";
 import { Order } from "./order.entity";
+import { Supplier } from "./supplier.entity";
 import { User } from "./user.entity";
 
 
@@ -28,5 +29,8 @@ export class Address {
     isMain: boolean
 
     @ManyToMany(() => User, (user) => user.address, {lazy: true})
-    user: User[]    
+    user: User[]   
+    
+    @OneToOne(() => Supplier, (supplier) => supplier.address)
+    supplier: Supplier
 }

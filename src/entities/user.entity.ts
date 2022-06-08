@@ -1,7 +1,8 @@
 import { compare } from "bcrypt";
-import { Column, Entity, ManyToMany, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, ManyToMany, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { Address } from "./address.entity";
 import { Cart } from "./cart.entity";
+import { Commerce } from "./commerce.entity";
 import { Order } from "./order.entity";
 
 export enum CompanyRole{
@@ -46,6 +47,9 @@ export class User {
 
     @OneToMany(() => Cart, (cart) => cart.user)
     cart: Cart[]
+
+    @ManyToOne(() => Commerce, (commerce) => commerce.users)
+    commerce: Commerce
 
     comparePassword = async (password: string): Promise<boolean> => await compare(password, this.password);
 
