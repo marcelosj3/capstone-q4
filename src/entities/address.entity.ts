@@ -2,7 +2,6 @@ import {
   Column,
   Entity,
   ManyToMany,
-  OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
@@ -19,13 +18,19 @@ export class Address {
   city: string;
 
   @Column()
+  state: string;
+
+  @Column()
   street: string;
+
+  @Column()
+  district: string;
 
   @Column()
   zipCode: string;
 
   @Column()
-  houseNumber: number;
+  houseNumber: string;
 
   @Column()
   additionalAddressData: string;

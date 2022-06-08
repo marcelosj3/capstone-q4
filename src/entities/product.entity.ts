@@ -2,13 +2,11 @@ import {
   Column,
   Entity,
   JoinColumn,
-  ManyToOne,
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
 import { CartProduct } from './cartProduct.entity';
-import { Commerce } from './commerce.entity';
 import { Stock } from './stock.entity';
 
 @Entity('products')
@@ -19,7 +17,7 @@ export class Product {
   @Column()
   name: string;
 
-  @Column({ unique: true })
+  @Column({ default: false })
   onSale: boolean;
 
   @Column()
@@ -31,7 +29,7 @@ export class Product {
   @Column({ nullable: true })
   description: string;
 
-  @Column()
+  @Column({ nullable: true })
   expiryDate: string;
 
   @OneToOne(() => CartProduct, (cartProduct) => cartProduct.product)
@@ -40,7 +38,4 @@ export class Product {
   @OneToOne(() => Stock, (stock) => stock.product)
   @JoinColumn()
   stock: Stock;
-
-  @ManyToOne(() => Commerce, (commerce) => commerce.products)
-  commerce: Commerce;
 }

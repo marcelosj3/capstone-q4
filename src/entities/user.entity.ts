@@ -2,15 +2,15 @@ import { compare } from 'bcrypt';
 import {
   Column,
   Entity,
+  JoinColumn,
+  JoinTable,
   ManyToMany,
-  ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
 import { Address } from './address.entity';
 import { Cart } from './cart.entity';
-import { Commerce } from './commerce.entity';
 import { Order } from './order.entity';
 
 export enum CompanyRole {
@@ -47,6 +47,7 @@ export class User {
   companyRole: CompanyRole;
 
   @ManyToMany(() => Address, (address) => address.user, { lazy: true })
+  @JoinTable()
   address: Address[];
 
   @OneToMany(() => Order, (order) => order.user, { lazy: true })
@@ -54,9 +55,6 @@ export class User {
 
   @OneToMany(() => Cart, (cart) => cart.user)
   cart: Cart[];
-
-  @ManyToOne(() => Commerce, (commerce) => commerce.users)
-  commerce: Commerce;
 
   comparePassword = async (password: string): Promise<boolean> =>
     await compare(password, this.password);

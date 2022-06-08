@@ -14,10 +14,10 @@ export class Stock {
   @PrimaryGeneratedColumn('uuid')
   readonly stockId?: string;
 
-  @Column()
+  @Column({ type: 'int' })
   quantity: number;
 
-  @Column()
+  @Column({ type: 'float' })
   unityValueSupplier: number;
 
   @Column({ type: 'int', default: 30 })
@@ -25,6 +25,9 @@ export class Stock {
 
   @Column({ default: true })
   isAvailable: boolean;
+
+  @Column({ type: 'float', nullable: true })
+  unityValueToSell: number;
 
   @OneToOne(() => Product, (product) => product.stock)
   product: Product;
