@@ -29,7 +29,7 @@ export class Product {
   @Column({ nullable: true })
   description: string;
 
-  @Column()
+  @Column({ nullable: true })
   expiryDate: string;
 
   @OneToOne(() => CartProduct, (cartProduct) => cartProduct.product)

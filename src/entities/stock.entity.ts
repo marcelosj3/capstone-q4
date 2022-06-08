@@ -5,7 +5,6 @@ import {
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { number } from 'yup';
 
 import { Product } from './product.entity';
 import { Supplier } from './supplier.entity';
@@ -15,7 +14,7 @@ export class Stock {
   @PrimaryGeneratedColumn('uuid')
   readonly stockId?: string;
 
-  @Column()
+  @Column({ type: 'int' })
   quantity: number;
 
   @Column({ type: 'float' })
@@ -27,7 +26,7 @@ export class Stock {
   @Column({ default: true })
   isAvailable: boolean;
 
-  @Column({ type: 'float' })
+  @Column({ type: 'float', nullable: true })
   unityValueToSell: number;
 
   @OneToOne(() => Product, (product) => product.stock)
