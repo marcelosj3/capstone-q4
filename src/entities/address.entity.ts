@@ -26,15 +26,13 @@ export class Address {
   @Column()
   street: string;
 
-  @Column()
-  // TODO transform this into a number
-  houseNumber: string;
+  @Column({ type: 'int' })
+  houseNumber: number;
 
   @Column()
   zipCode: string;
 
-  @Column()
-  // TODO change this to a nullable property
+  @Column({ nullable: true })
   additionalAddressData: string;
 
   @Column({ default: false })
