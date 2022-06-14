@@ -11,7 +11,7 @@ export const userClientWithoutAddress = {
     userId: '00000000-0000-4321-abcd-000000000000',
     name: 'John Doe',
     email: 'johndoe@mail.com',
-  } as User,
+  },
 };
 
 export const userClientWithAddress = {
@@ -74,16 +74,14 @@ export const userEmployeeWithAddress = {
     password: '1234',
     isEmployee: true,
     companyRole: 'employee',
-    address: [
-      {
-        state: 'Maranhão',
-        city: 'São Luís',
-        district: 'Jardim Alvorada',
-        street: 'R. Almeida Galhardo',
-        houseNumber: '1212',
-        zipCode: '65045-010',
-      },
-    ],
+    address: {
+      state: 'Maranhão',
+      city: 'São Luís',
+      district: 'Jardim Alvorada',
+      street: 'R. Almeida Galhardo',
+      houseNumber: '1212',
+      zipCode: '65045-010',
+    },
   },
   response: {
     userId: '33333333-0000-4321-abcd-000000000000',
@@ -132,16 +130,14 @@ export const userManagerWithAddress = {
     password: '1234',
     isEmployee: true,
     companyRole: 'manager',
-    address: [
-      {
-        state: 'Espírito Santo',
-        city: 'Ecoporanga',
-        district: 'Homero Amante',
-        street: 'R. Maria De Souza Pinto',
-        houseNumber: '666',
-        zipCode: '29850-000',
-      },
-    ],
+    address: {
+      state: 'Espírito Santo',
+      city: 'Ecoporanga',
+      district: 'Homero Amante',
+      street: 'R. Maria De Souza Pinto',
+      houseNumber: '666',
+      zipCode: '29850-000',
+    },
   },
   response: {
     userId: '55555555-0000-4321-abcd-000000000000',
@@ -190,16 +186,14 @@ export const userAdminWithAddress = {
     password: '1234',
     isEmployee: true,
     companyRole: 'admin',
-    address: [
-      {
-        state: 'São Paulo',
-        city: 'São Paulo',
-        district: 'Paraíso',
-        street: 'Rua Evaristo de Morais',
-        houseNumber: '000',
-        zipCode: '04007-070',
-      },
-    ],
+    address: {
+      state: 'São Paulo',
+      city: 'São Paulo',
+      district: 'Paraíso',
+      street: 'Rua Evaristo de Morais',
+      houseNumber: '000',
+      zipCode: '04007-070',
+    },
   },
   response: {
     userId: '77777777-0000-4321-abcd-000000000000',

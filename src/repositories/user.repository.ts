@@ -9,6 +9,10 @@ class UserRepository {
   constructor() {
     this.repo = AppDataSource.getRepository(User);
   }
+
+  create = (user: User) => this.repo.create(user);
+
+  save = async (user: User) => await this.repo.save(user);
 }
 
 export default new UserRepository();

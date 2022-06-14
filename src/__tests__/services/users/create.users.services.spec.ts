@@ -1,7 +1,18 @@
 import { DataSource } from 'typeorm';
 
 import { AppDataSource } from '../../../data-source';
-import { createUserWithoutAddress } from './__scenarios__';
+import { UserService } from '../../../services';
+import { UUIDMock } from '../../__mocks__';
+import {
+  createUserWithAddress,
+  createUserWithoutAddress,
+} from './__scenarios__';
+
+jest.mock('uuid', () => ({
+  __esModule: true,
+  ...jest.requireActual('uuid'),
+  v4: jest.fn(jest.requireActual('uuid').v4),
+}));
 
 describe('Creating a user', () => {
   let connection: DataSource;
@@ -18,13 +29,33 @@ describe('Creating a user', () => {
     await connection.destroy();
   });
 
-  test('Should create a user successfully', async () => {
-    const { payload, expected } = createUserWithoutAddress;
+  test('Should create an user without address successfully', async () => {
+    const { user, payload, expected } = createUserWithoutAddress;
 
-    // const result = await UserServices.create(payload)
-    const result = { statusCode: 201, message: {} };
+    UUIDMock.v4.mockReturnValueOnce(user.userId);
+
+    const result = await UserService.create(payload);
 
     expect(result.statusCode).toEqual(expected.status);
-    expect(result.message).toEqual(expected.message);
+    expect(result.message).not.toHaveProperty('address');
+    expect(result.message.userId).toEqual(expected.message.userId);
+    expect(result.message.name).toEqual(expected.message.name);
+    expect(result.message.email).toEqual(expected.message.email);
+  });
+
+  test('Should create an user with address successfully', async () => {
+    const { user, address, payload, expected } = createUserWithAddress;
+
+    UUIDMock.v4.mockReturnValueOnce(user.userId);
+    UUIDMock.v4.mockReturnValueOnce(address.addressId);
+
+    const result = await UserService.create(payload);
+
+    expect(result.statusCode).toEqual(expected.status);
+    expect(result.message).toHaveProperty('address');
+    expect(result.message.userId).toEqual(expected.message.userId);
+    expect(result.message.name).toEqual(expected.message.name);
+    expect(result.message.email).toEqual(expected.message.email);
+    expect(result.message.address).toEqual(expected.message.address);
   });
 });

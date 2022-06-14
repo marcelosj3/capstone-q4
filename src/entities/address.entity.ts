@@ -33,6 +33,7 @@ export class Address {
   houseNumber: string;
 
   @Column()
+  // TODO This should be a nullable data
   additionalAddressData: string;
 
   @Column({ default: false })
