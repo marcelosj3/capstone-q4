@@ -1,1 +1,1 @@
-export { cpfMatch } from './cpfMatch.util';
+export { cpfMatches } from './cpfMatches.util';

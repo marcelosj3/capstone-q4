@@ -1,3 +1,5 @@
+export { createAddressSchema, serializedCreatedAddressSchema } from './address';
+
 export {
   createProductSchema,
   serializedCreatedProductSchema,

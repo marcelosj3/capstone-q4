@@ -2,13 +2,13 @@ import { hashSync } from 'bcrypt';
 import { boolean, object, string } from 'yup';
 
 import { CompanyRole } from '../../entities';
-import { cpfMatch } from '../../utils';
+import { cpfMatches } from '../../utils';
 
 export const updateUserSchema = object().shape({
   name: string().nullable().notRequired(),
   email: string().email().lowercase().nullable().notRequired(),
   cpf: string()
-    .matches(cpfMatch.regex, cpfMatch.message)
+    .matches(cpfMatches.regex, cpfMatches.message)
     .nullable()
     .notRequired(),
   password: string()
