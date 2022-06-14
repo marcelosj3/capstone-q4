@@ -15,24 +15,26 @@ export class Address {
   readonly addressId?: string;
 
   @Column()
-  city: string;
-
-  @Column()
   state: string;
 
   @Column()
-  street: string;
+  city: string;
 
   @Column()
   district: string;
 
   @Column()
-  zipCode: string;
+  street: string;
 
   @Column()
+  // TODO transform this into a number
   houseNumber: string;
 
   @Column()
+  zipCode: string;
+
+  @Column()
+  // TODO change this to a nullable property
   additionalAddressData: string;
 
   @Column({ default: false })
