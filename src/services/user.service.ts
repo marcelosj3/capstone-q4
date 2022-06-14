@@ -4,9 +4,10 @@ import { AppDataSource } from '../data-source';
 import { Address, User } from '../entities';
 import { IReturnMessage } from '../interfaces/services';
 import { UserRepository } from '../repositories';
+import { serializedCreatedUserSchema } from '../schemas';
 
 class UserService {
-  create = async ({ validated }: Request): Promise<IReturnMessage<User>> => {
+  create = async ({ validated }: Request) => {
     let address: Address | undefined = validated.address || undefined;
     let user: User;
 
@@ -35,30 +36,11 @@ class UserService {
       });
     }
 
-    // TODO change all this logic for the yup schema once we validate the PR
-    let serializedUser = {
-      userId: user.userId,
-      name: user.name,
-      email: user.email,
-    };
+    const serializedUser = await serializedCreatedUserSchema.validate(user, {
+      stripUnknown: true,
+    });
 
-    if (address) {
-      // @ts-ignore
-      serializedUser.address = [
-        {
-          addressId: user.address[0].addressId,
-          city: user.address[0].city,
-          district: user.address[0].district,
-          houseNumber: user.address[0].houseNumber,
-          isMain: user.address[0].isMain,
-          state: user.address[0].state,
-          street: user.address[0].street,
-          zipCode: user.address[0].zipCode,
-        },
-      ];
-    }
-
-    return { statusCode: 201, message: serializedUser as User };
+    return { statusCode: 201, message: serializedUser };
   };
 }
 
