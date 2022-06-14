@@ -14,7 +14,7 @@ export const verifyUserExistsMiddleware = async (
   });
 
   if (foundUser) {
-    throw new AppError('Email already exists', 409);
+    throw new AppError({ error: 'Email already exists' }, 409);
   }
 
   return next();
