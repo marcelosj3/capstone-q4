@@ -19,5 +19,5 @@ export const createUserSchema = object().shape({
     .oneOf(Object.values(CompanyRole))
     .default(CompanyRole.CLIENT)
     .optional(),
-  address: createAddressSchema.notRequired(),
+  address: createAddressSchema.nullable().notRequired(),
 });
