@@ -5,4 +5,4 @@ export {
   expiryDateRegex,
 } from './product';
 
-export { cpfMessage, cpfRegex } from './user';
+export { cpfMatch } from './users';

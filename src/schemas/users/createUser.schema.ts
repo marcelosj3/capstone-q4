@@ -2,14 +2,14 @@ import { hashSync } from 'bcrypt';
 import { boolean, object, string } from 'yup';
 
 import { CompanyRole } from '../../entities';
-import { cpfMessage, cpfRegex } from '../../utils';
+import { cpfMatch } from '../../utils';
 
 export const createUserSchema = object().shape({
   name: string().required(),
   email: string().email().lowercase().required(),
-  cpf: string().matches(cpfRegex, cpfMessage).required(),
+  cpf: string().matches(cpfMatch.regex, cpfMatch.message).required(),
   password: string()
-    .min(6, 'Mínimo de 6 caracteres requeridos')
+    .min(6, 'At least 6 characters required')
     .transform((pwd: string) => hashSync(pwd, 8))
     .required(),
   isActive: boolean().default(false).optional(),

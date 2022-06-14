@@ -8,4 +8,4 @@ export {
   createUserSchema,
   serializedCreatedUserSchema,
   updateUserSchema,
-} from './user';
+} from './users';
