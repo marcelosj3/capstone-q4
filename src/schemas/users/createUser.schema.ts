@@ -3,7 +3,7 @@ import { boolean, object, string } from 'yup';
 
 import { CompanyRole } from '../../entities';
 import { cpfMatches } from '../../utils';
-import { createAddressSchema } from '../address';
+import { createAddressSchema } from '../addresses';
 
 export const createUserSchema = object().shape({
   name: string().required(),
