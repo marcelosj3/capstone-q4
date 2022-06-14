@@ -1,13 +1,26 @@
 import { Request } from 'express';
 
-import { userClientWithoutAddress } from '../../utils/users';
+import { User } from '../../../entities';
+import {
+  userClientWithAddress,
+  userClientWithoutAddress,
+} from '../../utils/users';
 
 export const createUserWithoutAddress = {
-  payload: { body: userClientWithoutAddress.payload } as Request,
+  user: userClientWithoutAddress.response,
+  payload: { validated: userClientWithoutAddress.payload } as Request,
   expected: {
     status: 201,
-    message: {
-      message: userClientWithoutAddress.response,
-    },
+    message: userClientWithoutAddress.response as User,
+  },
+};
+
+export const createUserWithAddress = {
+  user: userClientWithAddress.response,
+  address: userClientWithAddress.response.address[0],
+  payload: { validated: userClientWithAddress.payload } as Request,
+  expected: {
+    status: 201,
+    message: userClientWithAddress.response as User,
   },
 };

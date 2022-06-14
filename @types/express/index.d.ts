@@ -1,10 +1,9 @@
-import { Address, User } from "../../src/entities";
-import { TProduct } from "../../src/types";
+import { IUserAddressCreation } from '../../src/interfaces/users';
 
 declare global {
-    namespace Express{
-        interface Request {
-            validated: Address | TProduct | User
-        }
+  namespace Express {
+    interface Request {
+      validated: IUserAddressCreation;
     }
+  }
 }
