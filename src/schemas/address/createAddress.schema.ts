@@ -1,4 +1,4 @@
-import { boolean, object, string } from 'yup';
+import { boolean, number, object, string } from 'yup';
 
 import { zipCodeMatches } from '../../utils';
 
@@ -7,7 +7,7 @@ export const createAddressSchema = object().shape({
   city: string().required(),
   district: string().required(),
   street: string().required(),
-  houseNumber: string().required(),
+  houseNumber: number().positive().required(),
   zipCode: string()
     .matches(zipCodeMatches.regex, zipCodeMatches.message)
     .required(),

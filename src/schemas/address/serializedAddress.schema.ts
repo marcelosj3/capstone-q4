@@ -1,4 +1,4 @@
-import { boolean, object, string } from 'yup';
+import { boolean, number, object, string } from 'yup';
 
 export const serializedCreatedAddressSchema = object().shape({
   addressId: string().uuid().required(),
@@ -6,8 +6,8 @@ export const serializedCreatedAddressSchema = object().shape({
   city: string().required(),
   district: string().required(),
   street: string().required(),
-  houseNumber: string().required(),
+  houseNumber: number().required(),
   zipCode: string().required(),
-  additionalAddressData: string().required(),
+  additionalAddressData: string().notRequired(),
   isMain: boolean().required(),
 });
