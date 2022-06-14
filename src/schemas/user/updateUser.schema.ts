@@ -1,21 +1,22 @@
-import { boolean, object, string } from 'yup';
 import { hashSync } from 'bcrypt';
+import { boolean, object, string } from 'yup';
 
-import { CompanyRole } from '../../entities/user.entity';
+import { CompanyRole } from '../../entities';
+import { cpfMessage, cpfRegex } from '../../utils';
 
 export const updateUserSchema = object().shape({
-  name: string().notRequired(),
-  email: string().email().lowercase().notRequired(),
-  cpf: string()
-    .matches(/^\d{3}\.\d{3}\.\d{3}\-\d{2}$/, 'Valid format: 999.999.999-99')
-    .notRequired(),
+  name: string().nullable().notRequired(),
+  email: string().email().lowercase().nullable().notRequired(),
+  cpf: string().matches(cpfRegex, cpfMessage).nullable().notRequired(),
   password: string()
+    .min(6, 'Mínimo de 6 caracteres requeridos')
     .transform((pwd: string) => hashSync(pwd, 8))
+    .nullable()
     .notRequired(),
-    isActive: boolean().default(false).optional(),
-    isEmployee: boolean().default(false).optional(),
-    companyRole: string()
-      .oneOf(Object.values(CompanyRole))
-      .default(CompanyRole.CLIENT)
-      .optional(),
+  isActive: boolean().default(false).optional(),
+  isEmployee: boolean().default(false).optional(),
+  companyRole: string()
+    .oneOf(Object.values(CompanyRole))
+    .default(CompanyRole.CLIENT)
+    .optional(),
 });
