@@ -1,15 +1,15 @@
 import { boolean, object, string } from 'yup';
 
-import { CompanyRole } from '../../entities/user.entity';
+import { CompanyRole } from '../../entities';
 
-export const serializedCreateUserSchema = object().shape({
+export const serializedCreatedUserSchema = object().shape({
   userId: string().uuid().required(),
   name: string().required(),
   email: string().email().lowercase().required(),
-  isActive: boolean().default(false).optional(),
-  isEmployee: boolean().default(false).optional(),
+  isActive: boolean().default(false).required(),
+  isEmployee: boolean().default(false).required(),
   companyRole: string()
     .oneOf(Object.values(CompanyRole))
     .default(CompanyRole.CLIENT)
-    .optional(),
+    .required(),
 });

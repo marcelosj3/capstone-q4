@@ -1,15 +1,15 @@
-import { boolean, object, string } from 'yup';
 import { hashSync } from 'bcrypt';
+import { boolean, object, string } from 'yup';
 
-import { CompanyRole } from '../../entities/user.entity';
+import { CompanyRole } from '../../entities';
+import { cpfMessage, cpfRegex } from '../../utils';
 
 export const createUserSchema = object().shape({
   name: string().required(),
   email: string().email().lowercase().required(),
-  cpf: string()
-    .matches(/^\d{3}\.\d{3}\.\d{3}\-\d{2}$/, 'Valid format: 999.999.999-99')
-    .required(),
+  cpf: string().matches(cpfRegex, cpfMessage).required(),
   password: string()
+    .min(6, 'Mínimo de 6 caracteres requeridos')
     .transform((pwd: string) => hashSync(pwd, 8))
     .required(),
   isActive: boolean().default(false).optional(),
