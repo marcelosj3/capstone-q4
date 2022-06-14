@@ -5,4 +5,4 @@ export const cnpjMessage: string =
 
 // CNPJ pattern
 // XX.XXX.XXX/0001-XX 0001 - matriz
-// XX.XXX.XXX/0001-XX 0002 - filial
+// XX.XXX.XXX/0002-XX 0002 - filial
