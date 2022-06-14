@@ -2,15 +2,15 @@ import { NextFunction, Request, Response } from 'express';
 
 import { User } from '../entities';
 import { AppError } from '../errors';
-import userRepository from '../repositories/user.repository';
+import { UserRepository } from '../repositories';
 
 export const verifyUserExistsMiddleware = async (
   req: Request,
   _: Response,
   next: NextFunction
 ) => {
-  const foundUser: User | null = await userRepository.findOne({
-    email: (req.validated as User).email,
+  const foundUser: User | null = await UserRepository.findOne({
+    email: (req.validated as unknown as User).email,
   });
 
   if (foundUser) {
