@@ -2,8 +2,7 @@ export {
   createProductSchema,
   serializedCreatedProductSchema,
   updateProductSchema,
-} from './product';
-
+} from './products';
 export {
   createUserSchema,
   serializedCreatedUserSchema,
