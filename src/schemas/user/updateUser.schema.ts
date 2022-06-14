@@ -9,7 +9,7 @@ export const updateUserSchema = object().shape({
   email: string().email().lowercase().nullable().notRequired(),
   cpf: string().matches(cpfRegex, cpfMessage).nullable().notRequired(),
   password: string()
-    .min(6, 'Mínimo de 6 caracteres requeridos')
+    .min(6, 'Minimum 6 characters required')
     .transform((pwd: string) => hashSync(pwd, 8))
     .nullable()
     .notRequired(),

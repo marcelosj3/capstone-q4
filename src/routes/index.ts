@@ -1,5 +1,15 @@
-import { Express } from 'express';
+import { Express, Router } from 'express';
 
-export const registerRouters = (app: Express): void => {
-  // ...routes
+import { userRoutes } from './user.routes';
+
+const router = Router();
+
+const apiRouter = (): Router => {
+  router.use('/users', userRoutes());
+
+  return router;
+};
+
+export const appRoutes = (app: Express): void => {
+  app.use('/api', apiRouter());
 };
