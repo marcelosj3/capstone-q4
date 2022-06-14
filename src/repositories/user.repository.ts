@@ -9,6 +9,10 @@ class UserRepository {
   constructor() {
     this.repo = AppDataSource.getRepository(User);
   }
+
+  findOne = async (payload: object): Promise<User | null> => {
+    return await this.repo.findOneBy({ ...payload });
+  };
 }
 
 export default new UserRepository();
