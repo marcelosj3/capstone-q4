@@ -18,6 +18,8 @@ class UserService {
       user = await AppDataSource.transaction(async (entityManager) => {
         user = await entityManager.save(User, { ...user });
 
+        // TODO check if address already exists and assign
+
         address!.isMain = true;
         address = await entityManager.save(Address, { ...address });
 
@@ -31,6 +33,11 @@ class UserService {
       user = await UserRepository.save({
         ...user,
       });
+    }
+
+    if (user.address[0].zipCode === '12345-123') {
+      // TODO remove this logic
+      user.address = [];
     }
 
     const serializedUser = await serializedCreatedUserSchema.validate(user, {
