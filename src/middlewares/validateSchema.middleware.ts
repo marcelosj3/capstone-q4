@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from 'express';
 import { AnySchema } from 'yup';
 
 import { AppError } from '../errors';
+import { yupErrorsMessage } from '../utils';
 
 export const validateSchemaMiddleware =
   (shape: AnySchema) =>
@@ -15,7 +16,9 @@ export const validateSchemaMiddleware =
       req.validated = validated;
 
       return next();
-    } catch (error: any) {
-      throw new AppError(error.message, 400);
+    } catch (error) {
+      const errorMessage = yupErrorsMessage(error);
+
+      throw new AppError(errorMessage, 400);
     }
   };

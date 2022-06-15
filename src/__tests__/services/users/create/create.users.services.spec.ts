@@ -1,8 +1,8 @@
 import { DataSource } from 'typeorm';
 
-import { AppDataSource } from '../../../data-source';
-import { UserService } from '../../../services';
-import { UUIDMock } from '../../__mocks__';
+import { AppDataSource } from '../../../../data-source';
+import { UserService } from '../../../../services';
+import { UUIDMock } from '../../../__mocks__';
 import {
   createUserWithAddress,
   createUserWithoutAddress,
@@ -14,7 +14,7 @@ jest.mock('uuid', () => ({
   v4: jest.fn(jest.requireActual('uuid').v4),
 }));
 
-describe('Creating a user', () => {
+describe('Creating an user', () => {
   let connection: DataSource;
 
   beforeAll(async () => {
@@ -37,7 +37,8 @@ describe('Creating a user', () => {
     const result = await UserService.create(payload);
 
     expect(result.statusCode).toEqual(expected.status);
-    expect(result.message).not.toHaveProperty('address');
+    expect(result.message).toHaveProperty('address');
+    expect(result.message.address).toEqual([]);
     expect(result.message.userId).toEqual(expected.message.userId);
     expect(result.message.name).toEqual(expected.message.name);
     expect(result.message.email).toEqual(expected.message.email);
@@ -46,12 +47,10 @@ describe('Creating a user', () => {
   test('Should create an user with address successfully', async () => {
     const { user, address, payload, expected } = createUserWithAddress;
 
-    UUIDMock.v4.mockReturnValueOnce(user.userId);
     UUIDMock.v4.mockReturnValueOnce(address.addressId);
+    UUIDMock.v4.mockReturnValueOnce(user.userId);
 
     const result = await UserService.create(payload);
-
-    console.log(result.message);
 
     expect(result.statusCode).toEqual(expected.status);
     expect(result.message).toHaveProperty('address');
