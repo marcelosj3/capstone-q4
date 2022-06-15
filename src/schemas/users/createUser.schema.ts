@@ -1,5 +1,5 @@
 import { hashSync } from 'bcrypt';
-import { boolean, object, string } from 'yup';
+import { boolean, object, string, lazy, mixed } from 'yup';
 
 import { CompanyRole } from '../../entities';
 import { cpfMatches } from '../../utils';
@@ -19,5 +19,11 @@ export const createUserSchema = object().shape({
     .oneOf(Object.values(CompanyRole))
     .default(CompanyRole.CLIENT)
     .optional(),
-  address: createAddressSchema.nullable().notRequired(),
+  address: lazy((value) => {
+    if (value !== undefined) {
+      return createAddressSchema;
+    }
+
+    return mixed().notRequired();
+  }),
 });

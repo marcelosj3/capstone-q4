@@ -45,7 +45,7 @@ export class User {
   @Column({ default: CompanyRole.CLIENT })
   companyRole: CompanyRole;
 
-  @ManyToMany(() => Address, (address) => address.user, { lazy: true })
+  @ManyToMany(() => Address, (address) => address.user, { eager: true })
   @JoinTable()
   address: Address[];
 

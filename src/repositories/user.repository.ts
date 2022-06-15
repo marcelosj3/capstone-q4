@@ -12,10 +12,13 @@ class UserRepository {
 
   create = (user: User) => this.repo.create(user);
 
-  all = async () => await this.repo.find();
+  all = async () => await this.repo.find({ relations: ['address'] });
 
   findOne = async (payload: object): Promise<User | null> => {
-    return await this.repo.findOneBy({ ...payload });
+    return await this.repo.findOne({
+      where: { ...payload },
+      relations: ['address'],
+    });
   };
 
   save = async (user: User) => await this.repo.save(user);
