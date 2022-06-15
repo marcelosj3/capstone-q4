@@ -1,6 +1,8 @@
 import { Express, Router } from 'express';
 
-import { router, userRoutes } from './user.routes';
+import { userRoutes } from './user.routes';
+
+const router: Router = Router();
 
 const apiRouter = (): Router => {
   router.use('/users', userRoutes());
