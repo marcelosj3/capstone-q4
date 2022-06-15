@@ -6,7 +6,7 @@ declare global {
   namespace Express {
     interface Request {
       decoded: Pick<User, 'userId'> & JwtPayload;
-      validated: IUserAddressCreation | Address | TProduct | User;
+      validated: IUserAddressCreation;
     }
   }
 }
