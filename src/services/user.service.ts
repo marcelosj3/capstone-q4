@@ -3,6 +3,7 @@ import { sign } from 'jsonwebtoken';
 
 import { AppDataSource } from '../data-source';
 import { Address, User } from '../entities';
+import { AppError } from '../errors';
 import { UserRepository } from '../repositories';
 import { serializedCreatedUserSchema } from '../schemas';
 
@@ -54,11 +55,11 @@ class UserService {
     });
 
     if (!user) {
-      return { status: 401, error: { message: 'invalid credentials' } };
+      throw new AppError({ error: 'invalid credentials' }, 401);
     }
 
     if (!(await user.comparePassword(validated.password))) {
-      return { status: 401, error: { message: 'invalid credentials' } };
+      throw new AppError({ error: 'invalid credentials' }, 401);
     }
 
     const token: string = sign(
