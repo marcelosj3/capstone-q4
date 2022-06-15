@@ -66,7 +66,7 @@ class UserService {
       }
     );
 
-    return { status: 200, message: { token } };
+    return { statusCode: 200, message: { token } };
   };
 
   getAll = async () => {

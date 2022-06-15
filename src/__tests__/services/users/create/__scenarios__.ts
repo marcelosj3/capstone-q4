@@ -1,10 +1,8 @@
 import { Request } from 'express';
 
-import { User } from '../../../entities';
-import {
-  userClientWithAddress,
-  userClientWithoutAddress,
-} from '../../utils/users';
+import { User } from '../../../../entities';
+import { userClientWithAddress } from '../../../utils/users/usersWithAddress';
+import { userClientWithoutAddress } from '../../../utils/users/usersWithoutAddress';
 
 export const createUserWithoutAddress = {
   user: userClientWithoutAddress.response,
@@ -17,7 +15,7 @@ export const createUserWithoutAddress = {
 
 export const createUserWithAddress = {
   user: userClientWithAddress.response,
-  address: userClientWithAddress.response.address[0],
+  address: userClientWithAddress.response.address![0],
   payload: { validated: userClientWithAddress.payload } as Request,
   expected: {
     status: 201,

@@ -1,8 +1,8 @@
 import { DataSource } from 'typeorm';
 
-import { AppDataSource } from '../../../data-source';
-import { UserService } from '../../../services';
-import { UUIDMock } from '../../__mocks__';
+import { AppDataSource } from '../../../../data-source';
+import { UserService } from '../../../../services';
+import { UUIDMock } from '../../../__mocks__';
 import {
   createUserWithAddress,
   createUserWithoutAddress,
@@ -14,7 +14,7 @@ jest.mock('uuid', () => ({
   v4: jest.fn(jest.requireActual('uuid').v4),
 }));
 
-describe('Creating a user', () => {
+describe('Creating an user', () => {
   let connection: DataSource;
 
   beforeAll(async () => {
@@ -51,8 +51,6 @@ describe('Creating a user', () => {
     UUIDMock.v4.mockReturnValueOnce(user.userId);
 
     const result = await UserService.create(payload);
-
-    console.log(result.message);
 
     expect(result.statusCode).toEqual(expected.status);
     expect(result.message).toHaveProperty('address');
