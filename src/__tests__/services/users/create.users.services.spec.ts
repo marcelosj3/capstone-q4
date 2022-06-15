@@ -14,7 +14,7 @@ jest.mock('uuid', () => ({
   v4: jest.fn(jest.requireActual('uuid').v4),
 }));
 
-describe('Creating a user', () => {
+describe('Creating an user', () => {
   let connection: DataSource;
 
   beforeAll(async () => {

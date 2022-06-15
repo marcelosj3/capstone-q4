@@ -3,7 +3,8 @@ import { DataSource } from 'typeorm';
 import { AppDataSource } from '../../../../data-source';
 import { AppError } from '../../../../errors';
 import { UserService } from '../../../../services';
-import { UUIDMock } from '../../../__mocks__';
+import { BcryptMock, JWTMock } from '../../../__mocks__';
+import { populateDatabase } from '../../../utils/populateDatabase';
 import {
   loginSuccessfully,
   loginWithInvalidPassword,
@@ -16,7 +17,7 @@ jest.mock('uuid', () => ({
   v4: jest.fn(jest.requireActual('uuid').v4),
 }));
 
-describe('Creating a user', () => {
+describe('Login with an user', () => {
   let connection: DataSource;
 
   beforeAll(async () => {
@@ -25,6 +26,8 @@ describe('Creating a user', () => {
       .catch((err) => {
         console.error('Error during test data source initialization', err);
       });
+
+    await populateDatabase();
   });
 
   afterAll(async () => {
@@ -49,6 +52,7 @@ describe('Creating a user', () => {
 
     try {
       const result = await UserService.login(payload);
+
       expect(result).not.toHaveProperty('token');
     } catch (error: any) {
       expect(error).toBeInstanceOf(AppError);
@@ -60,13 +64,18 @@ describe('Creating a user', () => {
   test('Should login sucessfully and return a token', async () => {
     const { payload, expected } = loginSuccessfully;
 
+    BcryptMock.compare.mockResolvedValueOnce(true);
+    JWTMock.sign.mockReturnValueOnce(expected.message.token);
+
     try {
       const result = await UserService.login(payload);
+
       expect(result.statusCode).toEqual(expected.status);
-      expect(result).toHaveProperty('token');
+      expect(result.message).toHaveProperty('token');
+      expect(result.message).toEqual(expected.message);
     } catch (error: any) {
-      console.log('aaaaaaa', error);
-      expect(error).not.toBeInstanceOf(AppError);
+      expect(error.status).not.toEqual(401);
+      expect(error.message).not.toEqual({ error: 'invalid credentials' });
     }
   });
 });

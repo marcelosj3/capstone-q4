@@ -58,8 +58,6 @@ class UserService {
       throw new AppError({ error: 'invalid credentials' }, 401);
     }
 
-    console.log(user);
-
     const token: string = sign(
       { id: user.userId },
       String(process.env.SECRET_KEY),

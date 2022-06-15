@@ -17,7 +17,6 @@ export const loginWithUnexistingEmail = {
 };
 
 export const loginWithInvalidPassword = {
-  user: userClientWithAddress.response,
   payload: {
     validated: {
       ...userClientWithAddress.payload,
@@ -31,10 +30,9 @@ export const loginWithInvalidPassword = {
 };
 
 export const loginSuccessfully = {
-  user: userClientWithAddress.response,
   payload: { validated: userClientWithAddress.payload } as Request,
   expected: {
     status: 200,
-    message: { token: 'valid-token' },
+    message: { token: 'valid-user-token' },
   },
 };

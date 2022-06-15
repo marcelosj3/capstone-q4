@@ -94,7 +94,7 @@ export const userEmployeeWithAddress = {
     companyRole: 'employee',
     address: [
       {
-        addressId: '00000000-1111-4321-abcd-000000000000',
+        addressId: '11111111-1111-4321-abcd-000000000000',
         state: 'Maranhão',
         city: 'São Luís',
         district: 'Jardim Alvorada',
@@ -152,7 +152,7 @@ export const userManagerWithAddress = {
     companyRole: 'manager',
     address: [
       {
-        addressId: '11111111-1111-4321-abcd-000000000000',
+        addressId: '22222222-1111-4321-abcd-000000000000',
         state: 'Espírito Santo',
         city: 'Ecoporanga',
         district: 'Homero Amante',
@@ -210,7 +210,7 @@ export const userAdminWithAddress = {
     companyRole: 'admin',
     address: [
       {
-        addressId: '11111111-1111-4321-abcd-000000000000',
+        addressId: '33333333-1111-4321-abcd-000000000000',
         state: 'São Paulo',
         city: 'São Paulo',
         district: 'Paraíso',
@@ -234,3 +234,21 @@ export const userList = [
   userAdminWithoutAddress,
   userAdminWithAddress,
 ];
+
+export const userListWithoutAddress = [
+  userClientWithoutAddress,
+  userEmployeeWithoutAddress,
+  userManagerWithoutAddress,
+  userAdminWithoutAddress,
+];
+
+export const userListWithAddress = [
+  userClientWithAddress,
+  userEmployeeWithAddress,
+  userManagerWithAddress,
+  userAdminWithAddress,
+];
+
+export const userListResponse = userList.map((user) => user.response);
+
+export const userListPayload = userList.map((user) => user.payload);
