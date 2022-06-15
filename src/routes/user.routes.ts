@@ -17,5 +17,7 @@ export const userRoutes = (): Router => {
     UserController.create
   );
 
+  router.get('', UserController.getAll);
+
   return router;
 };

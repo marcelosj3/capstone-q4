@@ -9,12 +9,20 @@ export const verifyUserExistsMiddleware = async (
   _: Response,
   next: NextFunction
 ) => {
-  const foundUser: User | null = await UserRepository.findOne({
+  const foundUserEmail: User | null = await UserRepository.findOne({
     email: (req.validated as unknown as User).email,
   });
 
-  if (foundUser) {
+  if (foundUserEmail) {
     throw new AppError({ error: 'Email already exists' }, 409);
+  }
+
+  const foundUserCpf: User | null = await UserRepository.findOne({
+    cpf: (req.validated as unknown as User).cpf,
+  });
+
+  if (foundUserCpf) {
+    throw new AppError({ error: 'CPF already exists' }, 409);
   }
 
   return next();

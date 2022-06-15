@@ -7,6 +7,11 @@ class UserController {
     const { statusCode, message } = await UserService.create(req);
     return res.status(statusCode).json(message);
   };
+
+  getAll = async (_: Request, res: Response) => {
+    const { statusCode, message } = await UserService.getAll();
+    return res.status(statusCode).json(message);
+  };
 }
 
 export default new UserController();

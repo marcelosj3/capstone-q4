@@ -75,7 +75,7 @@ export class createTable1655235938178 implements MigrationInterface {
       `INSERT INTO "users" ("name", "email", "cpf", "password", "isActive", "isEmployee", "companyRole")
               VALUES ('${process.env.ADMIN_NAME}','${
         process.env.ADMIN_EMAIL
-      }', '00985823987', '${hashSync(
+      }', '009.858.239-87', '${hashSync(
         process.env.ADMIN_PASSWORD as string,
         10
       )}', true, true, 'admin')`
