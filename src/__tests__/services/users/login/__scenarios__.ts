@@ -1,10 +1,6 @@
 import { Request } from 'express';
 
-import { User } from '../../../../entities';
-import {
-  userClientWithAddress,
-  userClientWithoutAddress,
-} from '../../../utils/users';
+import { userClientWithAddress } from '../../../utils/users/usersWithAddress';
 
 export const loginWithUnexistingEmail = {
   payload: {
