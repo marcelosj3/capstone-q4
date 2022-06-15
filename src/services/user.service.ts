@@ -20,7 +20,7 @@ class UserService {
           ...(validated as unknown as User),
         });
 
-        const address = await entityManager.create(Address, { ...hasAddress });
+        const address = entityManager.create(Address, { ...hasAddress });
 
         address.isMain = true;
 
@@ -32,9 +32,6 @@ class UserService {
 
         return user;
       });
-
-      const address = await user.address;
-      user.address = address;
     } else {
       user = await UserRepository.save({
         ...(validated as unknown as User),
