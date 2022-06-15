@@ -16,12 +16,6 @@ export const validateSchemaMiddleware =
 
       return next();
     } catch (error: any) {
-      console.log('='.repeat(50));
-      console.log();
-      console.log(error);
-      console.log();
-      console.log('='.repeat(50));
-
       throw new AppError(error.message, 400);
     }
   };
