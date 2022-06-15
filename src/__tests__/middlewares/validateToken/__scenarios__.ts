@@ -38,12 +38,7 @@ export const validateTokenWithInvalidToken = {
 
 export const validateTokenSuccessfully = {
   payload: {
-    req: {
-      headers: {
-        authorization:
-          'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImNiZjRjZTFlLWM4YzQtNDU3NC1hNmU4LTI0ZGFhZjlmOTkyZCIsImlhdCI6MTY1NTMyNjIwNiwiZXhwIjoxNjU1NDEyNjA2fQ.GTrwScTY9FN1H1wR_-MtikM7cBo61jAoK9zNlm2zhOE',
-      },
-    } as Request,
+    req: { headers: { authorization: 'Bearer valid.auth.token' } } as Request,
     res: {} as Response,
     next: jest.fn() as NextFunction,
   },
