@@ -46,6 +46,20 @@ class UserService {
 
     return { statusCode: 201, message: serializedUser };
   };
+
+  getAll = async () => {
+    const users = await UserRepository.all();
+    const serializedUsers = await Promise.all(
+      users.map(
+        async (user: User) =>
+          await serializedCreatedUserSchema.validate(user, {
+            stripUnknown: true,
+          })
+      )
+    );
+
+    return { statusCode: 200, message: serializedUsers };
+  };
 }
 
 export default new UserService();

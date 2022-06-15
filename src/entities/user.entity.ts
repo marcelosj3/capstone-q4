@@ -2,7 +2,6 @@ import { compare } from 'bcrypt';
 import {
   Column,
   Entity,
-  JoinColumn,
   JoinTable,
   ManyToMany,
   OneToMany,
