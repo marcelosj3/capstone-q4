@@ -3,16 +3,14 @@ import { boolean, number, object, string } from 'yup';
 import { zipCodeMatches } from '../../utils';
 
 export const createAddressSchema = object().shape({
-  // TODO remove all these default values
-  state: string().default('aaa').optional(),
-  city: string().default('aaa').optional(),
-  district: string().default('aaa').optional(),
-  street: string().default('aaa').optional(),
-  houseNumber: number().positive().default(1).optional(),
+  state: string().required(),
+  city: string().required(),
+  district: string().required(),
+  street: string().required(),
+  houseNumber: number().positive().required(),
   zipCode: string()
     .matches(zipCodeMatches.regex, zipCodeMatches.message)
-    .default('12345-123')
-    .optional(),
+    .required(),
   additionalAddressData: string().default('').optional(),
   isMain: boolean().default(false).optional(),
 });

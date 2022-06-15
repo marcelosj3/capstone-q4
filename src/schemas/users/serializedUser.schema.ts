@@ -10,9 +10,5 @@ export const serializedCreatedUserSchema = object().shape({
   isActive: boolean().required(),
   isEmployee: boolean().required(),
   companyRole: string().oneOf(Object.values(CompanyRole)).required(),
-  address: array()
-    .of(serializedCreatedAddressSchema)
-    .nullable()
-    .default([])
-    .notRequired(),
+  address: array().of(serializedCreatedAddressSchema).default([]).optional(),
 });
