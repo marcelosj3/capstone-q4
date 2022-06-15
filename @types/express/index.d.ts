@@ -1,6 +1,5 @@
-import { Address, User } from '../../src/entities';
+import { User } from '../../src/entities';
 import { IUserAddressCreation } from '../../src/interfaces/users';
-import { TProduct } from '../../src/types';
 
 declare global {
   namespace Express {

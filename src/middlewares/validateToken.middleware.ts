@@ -12,7 +12,7 @@ export const validateTokenMiddleware = async (
   const token: string | undefined = req.headers.authorization?.split(' ')[1];
 
   if (!token) {
-    throw new AppError('Missing authorization token', 401);
+    throw new AppError({ error: 'Missing authorization token' }, 401);
   }
 
   return verify(token, String(process.env.SECRET_KEY), (error, decoded) => {

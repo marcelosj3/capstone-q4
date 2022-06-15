@@ -1,4 +1,5 @@
 import { Request } from 'express';
+import { sign } from 'jsonwebtoken';
 
 import { AppDataSource } from '../data-source';
 import { Address, User } from '../entities';
@@ -45,6 +46,30 @@ class UserService {
     });
 
     return { statusCode: 201, message: serializedUser };
+  };
+
+  login = async ({ validated }: Request) => {
+    const user = await UserRepository.findOne({
+      email: validated.email,
+    });
+
+    if (!user) {
+      return { status: 401, error: { message: 'invalid credentials' } };
+    }
+
+    if (!(await user.comparePassword(validated.password))) {
+      return { status: 401, error: { message: 'invalid credentials' } };
+    }
+
+    const token: string = sign(
+      { id: user.userId },
+      String(process.env.SECRET_KEY),
+      {
+        expiresIn: process.env.EXPIRES_IN,
+      }
+    );
+
+    return { status: 200, message: { token } };
   };
 
   getAll = async () => {
