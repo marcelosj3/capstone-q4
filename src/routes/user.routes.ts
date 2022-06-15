@@ -1,11 +1,14 @@
 import { Router } from 'express';
 
 import { UserController } from '../controllers/';
-import { validateSchemaMiddleware } from '../middlewares';
-import { verifyUserExistsMiddleware } from '../middlewares/verifyUserExists.middleware';
+import {
+  validateSchemaMiddleware,
+  validateSchemaMiddleware,
+  verifyUserExistsMiddleware,
+} from '../middlewares';
 import { createUserSchema } from '../schemas';
 
-const router = Router();
+const router: Router = Router();
 
 export const userRoutes = (): Router => {
   router.post(
