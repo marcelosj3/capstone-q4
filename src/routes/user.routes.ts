@@ -2,6 +2,7 @@ import { Router } from 'express';
 
 import { UserController } from '../controllers';
 import {
+  getUserByIdOr404Middleware,
   validateSchemaMiddleware,
   validateTokenMiddleware,
   verifyUserExistsMiddleware,
@@ -25,6 +26,13 @@ export const userRoutes = (): Router => {
   );
 
   router.get('', validateTokenMiddleware, UserController.getAll);
+
+  router.delete(
+    '/:uuid',
+    validateTokenMiddleware,
+    getUserByIdOr404Middleware,
+    UserController.delete
+  );
 
   return router;
 };

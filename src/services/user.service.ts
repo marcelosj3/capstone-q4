@@ -58,9 +58,13 @@ class UserService {
       throw new AppError({ error: 'invalid credentials' }, 401);
     }
 
-    const token: string = sign({ ...user }, String(process.env.SECRET_KEY), {
-      expiresIn: process.env.EXPIRES_IN,
-    });
+    const token: string = sign(
+      { id: user.userId },
+      String(process.env.SECRET_KEY),
+      {
+        expiresIn: process.env.EXPIRES_IN,
+      }
+    );
 
     return { status: 200, message: { token } };
   };
@@ -77,6 +81,12 @@ class UserService {
     );
 
     return { statusCode: 200, message: serializedUsers };
+  };
+
+  delete = async ({ user }: Request) => {
+    await UserRepository.delete(String(user.userId));
+
+    return { statusCode: 204 };
   };
 }
 
