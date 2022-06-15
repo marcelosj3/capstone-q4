@@ -3,42 +3,42 @@ import { sign } from 'jsonwebtoken';
 
 import { AppDataSource } from '../data-source';
 import { Address, User } from '../entities';
+import { AppError } from '../errors';
 import { UserRepository } from '../repositories';
 import { serializedCreatedUserSchema } from '../schemas';
 
 class UserService {
   create = async ({ validated }: Request) => {
-    let address: Address | undefined = validated.address || undefined;
+    const hasAddress: Address | undefined = validated.address || undefined;
     let user: User;
 
-    if (address) {
+    if (hasAddress) {
       delete validated.address;
 
-      user = validated as unknown as User;
-
       user = await AppDataSource.transaction(async (entityManager) => {
-        user = await entityManager.save(User, { ...user });
+        const user = entityManager.create(User, {
+          ...(validated as unknown as User),
+        });
 
-        // TODO check if address already exists and assign
+        const address = await entityManager.create(Address, { ...hasAddress });
 
-        address!.isMain = true;
-        address = await entityManager.save(Address, { ...address });
+        address.isMain = true;
 
         user.address = [address];
         address.user = [];
 
+        await entityManager.save(Address, address);
+        await entityManager.save(User, user);
+
         return user;
       });
-    } else {
-      user = validated as unknown as User;
-      user = await UserRepository.save({
-        ...user,
-      });
-    }
 
-    if (user.address[0].zipCode === '12345-123') {
-      // TODO remove this logic
-      user.address = [];
+      const address = await user.address;
+      user.address = address;
+    } else {
+      user = await UserRepository.save({
+        ...(validated as unknown as User),
+      });
     }
 
     const serializedUser = await serializedCreatedUserSchema.validate(user, {
@@ -54,11 +54,11 @@ class UserService {
     });
 
     if (!user) {
-      return { status: 401, error: { message: 'invalid credentials' } };
+      throw new AppError({ error: 'invalid credentials' }, 401);
     }
 
     if (!(await user.comparePassword(validated.password))) {
-      return { status: 401, error: { message: 'invalid credentials' } };
+      throw new AppError({ error: 'invalid credentials' }, 401);
     }
 
     const token: string = sign({ ...user }, String(process.env.SECRET_KEY), {
