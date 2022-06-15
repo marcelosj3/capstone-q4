@@ -37,7 +37,8 @@ describe('Creating a user', () => {
     const result = await UserService.create(payload);
 
     expect(result.statusCode).toEqual(expected.status);
-    expect(result.message).not.toHaveProperty('address');
+    expect(result.message).toHaveProperty('address');
+    expect(result.message.address).toEqual([]);
     expect(result.message.userId).toEqual(expected.message.userId);
     expect(result.message.name).toEqual(expected.message.name);
     expect(result.message.email).toEqual(expected.message.email);
@@ -46,8 +47,8 @@ describe('Creating a user', () => {
   test('Should create an user with address successfully', async () => {
     const { user, address, payload, expected } = createUserWithAddress;
 
-    UUIDMock.v4.mockReturnValueOnce(user.userId);
     UUIDMock.v4.mockReturnValueOnce(address.addressId);
+    UUIDMock.v4.mockReturnValueOnce(user.userId);
 
     const result = await UserService.create(payload);
 
