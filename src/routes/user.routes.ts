@@ -3,9 +3,10 @@ import { Router } from 'express';
 import { UserController } from '../controllers';
 import {
   validateSchemaMiddleware,
+  validateTokenMiddleware,
   verifyUserExistsMiddleware,
 } from '../middlewares';
-import { createUserSchema } from '../schemas';
+import { createUserSchema, loginUserSchema } from '../schemas';
 
 const router: Router = Router();
 
@@ -17,7 +18,13 @@ export const userRoutes = (): Router => {
     UserController.create
   );
 
-  router.get('', UserController.getAll);
+  router.post(
+    '/login',
+    validateSchemaMiddleware(loginUserSchema),
+    UserController.login
+  );
+
+  router.get('', validateTokenMiddleware, UserController.getAll);
 
   return router;
 };

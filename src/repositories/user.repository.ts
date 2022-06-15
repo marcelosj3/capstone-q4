@@ -2,6 +2,7 @@ import { Repository } from 'typeorm';
 
 import { AppDataSource } from '../data-source';
 import { User } from '../entities';
+
 class UserRepository {
   private repo: Repository<User>;
 
@@ -10,7 +11,7 @@ class UserRepository {
   }
 
   create = (user: User) => this.repo.create(user);
-  
+
   all = async () => await this.repo.find();
 
   findOne = async (payload: object): Promise<User | null> => {

@@ -10,6 +10,7 @@ export {
 } from './products';
 export {
   createUserSchema,
+  loginUserSchema,
   serializedCreatedUserSchema,
   updateUserSchema,
 } from './users';
