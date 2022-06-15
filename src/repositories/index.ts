@@ -1,3 +1,4 @@
-import UserRepositories from './user.repositories';
+import AddressRepository from './address.repository';
+import UserRepository from './user.repository';
 
-export { UserRepositories };
+export { AddressRepository, UserRepository };
