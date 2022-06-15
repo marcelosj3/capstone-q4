@@ -2,7 +2,7 @@ import { Express, Router } from 'express';
 
 import { userRoutes } from './user.routes';
 
-const router = Router();
+const router: Router = Router();
 
 const apiRouter = (): Router => {
   router.use('/users', userRoutes());

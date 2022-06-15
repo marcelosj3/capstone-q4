@@ -1,0 +1,1 @@
+export { TProduct } from './product';
