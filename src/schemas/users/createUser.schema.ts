@@ -1,5 +1,5 @@
-import { boolean, object, string } from 'yup';
 import { hashSync } from 'bcrypt';
+import { boolean, object, string } from 'yup';
 
 import { CompanyRole } from '../../entities';
 import { cpfMatches } from '../../utils';

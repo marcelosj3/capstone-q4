@@ -1,8 +1,7 @@
 import { Router } from 'express';
 
-import { UserController } from '../controllers/';
+import { UserController } from '../controllers';
 import {
-  validateSchemaMiddleware,
   validateSchemaMiddleware,
   verifyUserExistsMiddleware,
 } from '../middlewares';
