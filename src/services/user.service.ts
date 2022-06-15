@@ -58,6 +58,8 @@ class UserService {
       throw new AppError({ error: 'invalid credentials' }, 401);
     }
 
+    console.log(user);
+
     const token: string = sign(
       { id: user.userId },
       String(process.env.SECRET_KEY),
@@ -66,7 +68,7 @@ class UserService {
       }
     );
 
-    return { status: 200, message: { token } };
+    return { statusCode: 200, message: { token } };
   };
 
   getAll = async () => {
