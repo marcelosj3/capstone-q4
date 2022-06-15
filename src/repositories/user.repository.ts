@@ -1,4 +1,4 @@
-import { Repository } from 'typeorm';
+import { DeleteResult, Repository } from 'typeorm';
 
 import { AppDataSource } from '../data-source';
 import { User } from '../entities';
@@ -12,7 +12,8 @@ class UserRepository {
 
   create = (user: User) => this.repo.create(user);
 
-  all = async () => await this.repo.find({ relations: ['address'] });
+  all = async (): Promise<User[]> =>
+    await this.repo.find({ relations: ['address'] });
 
   findOne = async (payload: object): Promise<User | null> => {
     return await this.repo.findOne({
@@ -21,7 +22,10 @@ class UserRepository {
     });
   };
 
-  save = async (user: User) => await this.repo.save(user);
+  save = async (user: User): Promise<User> => await this.repo.save(user);
+
+  delete = async (uuid: string): Promise<DeleteResult> =>
+    await this.repo.delete(uuid);
 }
 
 export default new UserRepository();

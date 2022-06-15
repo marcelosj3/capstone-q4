@@ -82,6 +82,12 @@ class UserService {
 
     return { statusCode: 200, message: serializedUsers };
   };
+
+  delete = async ({ user }: Request) => {
+    await UserRepository.delete(String(user.userId));
+
+    return { statusCode: 204 };
+  };
 }
 
 export default new UserService();

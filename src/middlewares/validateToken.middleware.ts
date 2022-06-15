@@ -8,7 +8,7 @@ export const validateTokenMiddleware = async (
   req: Request,
   _: Response,
   next: NextFunction
-) => {
+): Promise<void> => {
   const token: string | undefined = req.headers.authorization?.split(' ')[1];
 
   if (!token) {
