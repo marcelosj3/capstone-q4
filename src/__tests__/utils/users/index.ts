@@ -1,4 +1,4 @@
-import { User } from '../../../entities';
+import { Address, User } from '../../../entities';
 
 export const userClientWithoutAddress = {
   payload: {
@@ -11,7 +11,8 @@ export const userClientWithoutAddress = {
     userId: '00000000-0000-4321-abcd-000000000000',
     name: 'John Doe',
     email: 'johndoe@mail.com',
-  },
+    address: [] as Address[],
+  } as User,
 };
 
 export const userClientWithAddress = {
@@ -65,6 +66,7 @@ export const userEmployeeWithoutAddress = {
     email: 'kateausten@lost.com',
     isEmployee: true,
     companyRole: 'employee',
+    address: [] as Address[],
   } as User,
 };
 
@@ -123,6 +125,7 @@ export const userManagerWithoutAddress = {
     email: 'carlaodopastel@mail.com',
     isEmployee: true,
     companyRole: 'manager',
+    address: [] as Address[],
   } as User,
 };
 
@@ -181,6 +184,7 @@ export const userAdminWithoutAddress = {
     email: 'richardjudas@mail.com',
     isEmployee: true,
     companyRole: 'admin',
+    address: [] as Address[],
   } as User,
 };
 
