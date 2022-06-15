@@ -1,9 +1,9 @@
 import { Address, User } from '../../../entities';
 import { AddressRepository, UserRepository } from '../../../repositories';
 import { UUIDMock } from '../../__mocks__';
+import { IUserPayloadResponse } from '../interfaces/populateDatabase';
 
-// @ts-ignore
-export const insertOneUserWithAddress = async (user) => {
+export const insertOneUserWithAddress = async (user: IUserPayloadResponse) => {
   const copyUser = JSON.parse(JSON.stringify(user));
 
   const { payload, response } = copyUser;

@@ -1,0 +1,1 @@
+export { IUserPayloadResponse } from './userPayloadResponse';

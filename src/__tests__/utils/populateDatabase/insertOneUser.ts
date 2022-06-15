@@ -1,9 +1,9 @@
 import { User } from '../../../entities';
 import { UserRepository } from '../../../repositories';
 import { UUIDMock } from '../../__mocks__';
+import { IUserPayloadResponse } from '../interfaces/populateDatabase';
 
-// @ts-ignore
-export const insertOneUser = async (user) => {
+export const insertOneUser = async (user: IUserPayloadResponse) => {
   const { payload, response } = user;
 
   const userCreate = UserRepository.create(payload as User);
