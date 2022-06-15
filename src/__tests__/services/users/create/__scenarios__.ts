@@ -1,8 +1,8 @@
 import { Request } from 'express';
 
-import { User } from '../../../entities';
-import { userClientWithAddress } from '../../utils/users/usersWithAddress';
-import { userClientWithoutAddress } from '../../utils/users/usersWithoutAddress';
+import { User } from '../../../../entities';
+import { userClientWithAddress } from '../../../utils/users/usersWithAddress';
+import { userClientWithoutAddress } from '../../../utils/users/usersWithoutAddress';
 
 export const createUserWithoutAddress = {
   user: userClientWithoutAddress.response,
