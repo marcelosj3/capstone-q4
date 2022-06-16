@@ -1,7 +1,7 @@
 import { hashSync } from 'bcrypt';
 import { boolean, object, string } from 'yup';
 
-import { CompanyRole } from '../../entities';
+import { CompanyRole } from '../../types';
 import { cpfMatches } from '../../utils';
 
 export const updateUserSchema = object().shape({

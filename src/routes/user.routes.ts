@@ -5,9 +5,11 @@ import {
   getUserByIdOr404Middleware,
   validateSchemaMiddleware,
   validateTokenMiddleware,
+  verifyRoleMiddleware,
   verifyUserExistsMiddleware,
 } from '../middlewares';
 import { createUserSchema, loginUserSchema } from '../schemas';
+import { CompanyRole } from '../types';
 
 const router: Router = Router();
 
@@ -25,7 +27,12 @@ export const userRoutes = (): Router => {
     UserController.login
   );
 
-  router.get('', validateTokenMiddleware, UserController.getAll);
+  router.get(
+    '',
+    validateTokenMiddleware,
+    verifyRoleMiddleware(CompanyRole.EMPLOYEE),
+    UserController.getAll
+  );
 
   router.delete(
     '/:uuid',

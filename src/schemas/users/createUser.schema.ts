@@ -1,7 +1,7 @@
 import { hashSync } from 'bcrypt';
 import { boolean, object, string, lazy, mixed } from 'yup';
 
-import { CompanyRole } from '../../entities';
+import { CompanyRole } from '../../types';
 import { cpfMatches } from '../../utils';
 import { createAddressSchema } from '../addresses';
 

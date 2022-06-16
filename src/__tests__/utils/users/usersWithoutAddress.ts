@@ -1,4 +1,5 @@
-import { CompanyRole, User } from '../../../entities';
+import { User } from '../../../entities';
+import { CompanyRole } from '../../../types';
 import { IUserPayloadResponse } from '../interfaces/populateDatabase';
 
 export const userClientWithoutAddress: IUserPayloadResponse = {
