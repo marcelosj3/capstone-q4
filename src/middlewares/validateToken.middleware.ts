@@ -17,7 +17,7 @@ export const validateTokenMiddleware = async (
 
   return verify(token, String(process.env.SECRET_KEY), (error, decoded) => {
     if (error) {
-      throw new AppError(error.message, 401);
+      throw new AppError({ error: error.message }, 401);
     }
 
     req.decoded = decoded as Pick<User, 'userId'> & JwtPayload;
