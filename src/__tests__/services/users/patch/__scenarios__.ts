@@ -10,7 +10,7 @@ export const patchUserPassword = {
   } as User,
   body: {
     password: '4321',
-    oldPassword: '1234',
+    oldPassword: '12345',
   },
   expected: {
     status: 200,

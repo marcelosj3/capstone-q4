@@ -3,6 +3,7 @@ import { DataSource } from 'typeorm';
 
 import { AppDataSource } from '../../../../data-source';
 import { UserService } from '../../../../services';
+import { BcryptMock } from '../../../__mocks__';
 import {
   patchUserEmail,
   patchUserEmailAndPassword,
@@ -21,22 +22,33 @@ describe('Patch an user', () => {
   afterAll(async () => await connection.destroy());
   test('Should patch an user password sucessfully', async () => {
     const { user, body, expected } = patchUserPassword;
-    const result = await UserService.patch({ user, body } as Request);
-
-    expect(result.statusCode).toEqual(expected.status);
-    expect(result.message).toEqual(expected.message);
+    BcryptMock.compare.mockResolvedValueOnce(true);
+    try {
+      const result = await UserService.patch({ user, body } as Request);
+      expect(result.statusCode).toEqual(expected.status);
+      expect(result.message).toEqual(expected.message);
+    } catch (error: any) {
+      expect(error.status).not.toEqual(401);
+      expect(error.message).toEqual({ error: 'Invalid old password' });
+    }
   });
   test('Should patch an user email sucessfully', async () => {
     const { user, body, expected } = patchUserEmail;
+    BcryptMock.compare.mockResolvedValueOnce(false);
     const result = await UserService.patch({ user, body } as Request);
-
     expect(result.statusCode).toEqual(expected.status);
-    expect(result.message).toEqual(expected.message);
+    expect(result.message.email).toEqual(expected.message.email);
   });
   test('Should pactch an user email and password sucessfully', async () => {
     const { user, expected, body } = patchUserEmailAndPassword;
-    const result = await UserService.patch({ user, body } as Request);
-    expect(result.statusCode).toEqual(expected.status);
-    expect(result.message).toEqual(expected.message);
+    BcryptMock.compare.mockResolvedValueOnce(true);
+    try {
+      const result = await UserService.patch({ user, body } as Request);
+      expect(result.statusCode).toEqual(expected.status);
+      expect(result.message).toEqual(expected.message);
+    } catch (error: any) {
+      expect(error.status).not.toEqual(401);
+      expect(error.message).not.toEqual({ error: 'Invalid old passwords' });
+    }
   });
 });
