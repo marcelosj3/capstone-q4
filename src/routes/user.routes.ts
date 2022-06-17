@@ -7,7 +7,11 @@ import {
   validateTokenMiddleware,
   verifyUserExistsMiddleware,
 } from '../middlewares';
-import { createUserSchema, loginUserSchema } from '../schemas';
+import {
+  createUserSchema,
+  loginUserSchema,
+  updateUserSchema,
+} from '../schemas';
 
 const router: Router = Router();
 
@@ -26,6 +30,14 @@ export const userRoutes = (): Router => {
   );
 
   router.get('', validateTokenMiddleware, UserController.getAll);
+
+  router.delete(
+    '/me',
+    validateSchemaMiddleware(updateUserSchema),
+    validateTokenMiddleware,
+    getUserByIdOr404Middleware,
+    UserController.patch
+  );
 
   router.delete(
     '/:uuid',
