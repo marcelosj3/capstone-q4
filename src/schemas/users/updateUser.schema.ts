@@ -12,7 +12,6 @@ export const updateUserSchema = object().shape({
     .nullable()
     .notRequired(),
   password: string()
-    .min(6, 'At least 6 characters required')
     .transform((pwd: string) => hashSync(pwd, 8))
     .nullable()
     .notRequired(),

@@ -1,4 +1,4 @@
-import { User } from '../../../entities';
+import { Address, User } from '../../../entities';
 import { CompanyRole } from '../../../types';
 import { IUserPayloadResponse } from '../interfaces/populateDatabase';
 
@@ -13,7 +13,11 @@ export const userClientWithoutAddress: IUserPayloadResponse = {
     userId: '00000000-0000-4321-abcd-000000000000',
     name: 'John Doe',
     email: 'johndoe@mail.com',
-  },
+    isActive: false,
+    isEmployee: false,
+    companyRole: CompanyRole.CLIENT,
+    address: [] as Address[],
+  } as User,
 };
 
 export const userEmployeeWithoutAddress: IUserPayloadResponse = {
@@ -29,8 +33,10 @@ export const userEmployeeWithoutAddress: IUserPayloadResponse = {
     userId: '22222222-0000-4321-abcd-000000000000',
     name: 'Kate Austen',
     email: 'kateausten@lost.com',
+    isActive: false,
     isEmployee: true,
-    companyRole: 'employee',
+    companyRole: CompanyRole.CLIENT,
+    address: [] as Address[],
   } as User,
 };
 
@@ -47,8 +53,10 @@ export const userManagerWithoutAddress: IUserPayloadResponse = {
     userId: '44444444-0000-4321-abcd-000000000000',
     name: 'Carlão do Pastel',
     email: 'carlaodopastel@mail.com',
+    isActive: false,
     isEmployee: true,
-    companyRole: 'manager',
+    companyRole: CompanyRole.MANAGER,
+    address: [] as Address[],
   } as User,
 };
 
@@ -65,8 +73,28 @@ export const userAdminWithoutAddress: IUserPayloadResponse = {
     userId: '66666666-0000-4321-abcd-000000000000',
     name: 'Richard Judas',
     email: 'richardjudas@mail.com',
+    isActive: false,
     isEmployee: true,
-    companyRole: 'admin',
+    companyRole: CompanyRole.ADMIN,
+    address: [] as Address[],
+  } as User,
+};
+
+export const userClientWithoutAddress2: IUserPayloadResponse = {
+  payload: {
+    name: 'Doe Johnny',
+    email: 'doejohnny@mail.com',
+    cpf: '888.888.888-88',
+    password: '1234',
+  },
+  response: {
+    userId: '12345678-0000-4321-abcd-000000000000',
+    name: 'Doe Johnny',
+    email: 'doejohnny@mail.com',
+    isActive: false,
+    isEmployee: false,
+    companyRole: CompanyRole.CLIENT,
+    address: [] as Address[],
   } as User,
 };
 
@@ -75,6 +103,7 @@ export const userListWithoutAddress: IUserPayloadResponse[] = [
   userEmployeeWithoutAddress,
   userManagerWithoutAddress,
   userAdminWithoutAddress,
+  userClientWithoutAddress2,
 ];
 
 export const userListWithoutAddressResponse = userListWithoutAddress.map(

@@ -1,6 +1,8 @@
+export { zipCodeMatches } from './addresses';
+
 export { yupErrorsMessage } from './errors';
 
-export { zipCodeMatches } from './addresses';
+export { capitalizeText } from './generics';
 
 export { cpfMatches, verifyRolePermission } from './users';
 

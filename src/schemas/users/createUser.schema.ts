@@ -2,15 +2,17 @@ import { hashSync } from 'bcrypt';
 import { boolean, object, string, lazy, mixed } from 'yup';
 
 import { CompanyRole } from '../../types';
-import { cpfMatches } from '../../utils';
+import { capitalizeText, cpfMatches } from '../../utils';
+import { emailFormat } from '../../utils/users';
 import { createAddressSchema } from '../addresses';
 
 export const createUserSchema = object().shape({
-  name: string().required(),
-  email: string().email().lowercase().required(),
+  name: string()
+    .required()
+    .transform((name: string) => capitalizeText(name)),
+  email: string().email(emailFormat.message).lowercase().required(),
   cpf: string().matches(cpfMatches.regex, cpfMatches.message).required(),
   password: string()
-    .min(6, 'At least 6 characters required')
     .transform((pwd: string) => hashSync(pwd, 8))
     .required(),
   isActive: boolean().default(false).optional(),

@@ -14,7 +14,7 @@ export const validateTokenWithMissingToken = {
 
 export const validateTokenWithMalformedJwt = {
   payload: {
-    req: { headers: { authorization: 'Bearer invalid' } } as Request,
+    req: { headers: { authorization: 'Bearer malformed' } } as Request,
     res: {} as Response,
     next: {} as NextFunction,
   },
