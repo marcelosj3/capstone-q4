@@ -84,7 +84,7 @@ export const userClientWithoutAddress2: IUserPayloadResponse = {
   payload: {
     name: 'Doe Johnny',
     email: 'doejohnny@mail.com',
-    cpf: '888.888.888-88',
+    cpf: '999.999.999-99',
     password: '1234',
   },
   response: {

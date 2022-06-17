@@ -11,6 +11,7 @@ import {
   createEmployeeUserWithMalformedJwt,
   createEmployeeUserWithManagerToken,
   createEmployeeUserWithoutToken,
+  createInvalidRoleUserWithValidUserToken,
   createManagerUserWithAdminToken,
   createManagerUserWithManagerToken,
   createUserSuccessfuly,
@@ -241,6 +242,19 @@ describe(`POST ${ROUTE}`, () => {
   test('Should be able to create a manager user by having an admin token', async () => {
     const { userToCreate, tokenUser, payload, expected } =
       createManagerUserWithAdminToken;
+
+    const response = await request(app)
+      .post(ROUTE)
+      .set('Authorization', 'Bearer: valid.auth.token')
+      .send(payload);
+
+    expect(response.status).toEqual(expected.status);
+    expect(response.body).toEqual(expected.message);
+  });
+
+  test('Should receive a not valid company role error', async () => {
+    const { userToCreate, tokenUser, payload, expected } =
+      createInvalidRoleUserWithValidUserToken;
 
     const response = await request(app)
       .post(ROUTE)

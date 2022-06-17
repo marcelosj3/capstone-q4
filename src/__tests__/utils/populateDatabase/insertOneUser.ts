@@ -14,9 +14,7 @@ import { insertOneUserWithoutAddress } from './insertOneUserWithoutAddress';
 export const insertOneUser = async (user: IUserPayloadResponse) => {
   const hasAddress = !!user.payload.address;
 
-  if (hasAddress) {
-    insertOneUserWithAddress(user);
-  } else {
-    insertOneUserWithoutAddress(user);
-  }
+  if (hasAddress) return insertOneUserWithAddress(user);
+
+  return insertOneUserWithoutAddress(user);
 };

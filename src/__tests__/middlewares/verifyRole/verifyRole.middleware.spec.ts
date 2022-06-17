@@ -21,6 +21,9 @@ import {
   verifyRoleManagerAsUserClient,
   verifyRoleManagerAsUserEmployee,
   verifyRoleManagerAsUserManager,
+  verifyRoleWithDecodedKeyAndNoValidateTokenParameter,
+  verifyRoleWithoutDecodedKey,
+  verifyRoleWithoutDecodedKeyAndNoValidateTokenParameter,
 } from './__scenarios__';
 
 jest.mock('uuid', () => ({
@@ -61,6 +64,7 @@ describe('Verify an user role against a minimum required permission level', () =
       expect(error.message).toEqual(expected.message);
     }
 
+    expect(AppError).toThrow();
     expect(next).not.toBeCalled();
   });
 
@@ -79,6 +83,7 @@ describe('Verify an user role against a minimum required permission level', () =
       expect(error.message).toEqual(expected.message);
     }
 
+    expect(AppError).toThrow();
     expect(next).not.toBeCalled();
   });
 
@@ -97,6 +102,7 @@ describe('Verify an user role against a minimum required permission level', () =
       expect(error.message).toEqual(expected.message);
     }
 
+    expect(AppError).toThrow();
     expect(next).not.toBeCalled();
   });
 
@@ -128,6 +134,7 @@ describe('Verify an user role against a minimum required permission level', () =
       expect(error.message).toEqual(expected.message);
     }
 
+    expect(AppError).toThrow();
     expect(next).not.toBeCalled();
   });
 
@@ -146,6 +153,7 @@ describe('Verify an user role against a minimum required permission level', () =
       expect(error.message).toEqual(expected.message);
     }
 
+    expect(AppError).toThrow();
     expect(next).not.toBeCalled();
   });
 
@@ -190,6 +198,7 @@ describe('Verify an user role against a minimum required permission level', () =
       expect(error.message).toEqual(expected.message);
     }
 
+    expect(AppError).toThrow();
     expect(next).not.toBeCalled();
   });
 
@@ -280,6 +289,51 @@ describe('Verify an user role against a minimum required permission level', () =
     try {
       await verifyRoleMiddleware(authorizedRole)(req, res, next);
     } catch (error) {}
+
+    expect(next).toBeCalled();
+  });
+
+  test('Should check if has a decoded key and throw an error', async () => {
+    const {
+      authorizedRole,
+      payload: { req, res, next },
+      expected,
+    } = verifyRoleWithoutDecodedKey;
+
+    try {
+      await verifyRoleMiddleware(authorizedRole)(req, res, next);
+    } catch (error: any) {
+      expect(error).toBeInstanceOf(AppError);
+      expect(error.statusCode).toEqual(expected.statusCode);
+      expect(error.message).toEqual(expected.message);
+    }
+
+    expect(AppError).toThrow();
+    expect(next).not.toBeCalled();
+  });
+
+  test('Should not be required to verify for the permission, but will verify if it has a decoded token', async () => {
+    const {
+      authorizedRole,
+      payload: { req, res, next },
+    } = verifyRoleWithDecodedKeyAndNoValidateTokenParameter;
+
+    try {
+      await verifyRoleMiddleware(authorizedRole, false)(req, res, next);
+    } catch (error: any) {}
+
+    expect(next).toBeCalled();
+  });
+
+  test('Should not be required to verify for the permission and not have a token, so proceed to the next function', async () => {
+    const {
+      authorizedRole,
+      payload: { req, res, next },
+    } = verifyRoleWithoutDecodedKeyAndNoValidateTokenParameter;
+
+    try {
+      await verifyRoleMiddleware(authorizedRole, false)(req, res, next);
+    } catch (error: any) {}
 
     expect(next).toBeCalled();
   });

@@ -7,9 +7,41 @@ import {
 } from '../../utils/users/usersWithAddress';
 import {
   userClientWithoutAddress,
-  userEmployeeWithoutAddress,
   userManagerWithoutAddress,
 } from '../../utils/users/usersWithoutAddress';
+
+export const verifyRoleWithoutDecodedKey = {
+  authorizedRole: CompanyRole.ADMIN,
+  payload: {
+    req: {} as Request,
+    res: {} as Response,
+    next: jest.fn() as NextFunction,
+  },
+  expected: {
+    statusCode: 400,
+    message: { error: 'A valid token is required to proceed' },
+  },
+};
+
+export const verifyRoleWithDecodedKeyAndNoValidateTokenParameter = {
+  authorizedRole: CompanyRole.ADMIN,
+  payload: {
+    req: {
+      decoded: { id: userClientWithoutAddress.response.userId },
+    } as Request,
+    res: {} as Response,
+    next: jest.fn() as NextFunction,
+  },
+};
+
+export const verifyRoleWithoutDecodedKeyAndNoValidateTokenParameter = {
+  authorizedRole: CompanyRole.ADMIN,
+  payload: {
+    req: {} as Request,
+    res: {} as Response,
+    next: jest.fn() as NextFunction,
+  },
+};
 
 export const verifyRoleAdminAsUserClient = {
   authorizedRole: CompanyRole.ADMIN,

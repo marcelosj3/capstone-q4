@@ -220,3 +220,13 @@ export const createManagerUserWithAdminToken = {
     message: { error: 'invalid token' },
   },
 };
+
+export const createInvalidRoleUserWithValidUserToken = {
+  userToCreate: userManagerWithoutAddress.response,
+  tokenUser: userAdminWithoutAddress.response,
+  payload: userManagerWithoutAddress.payload,
+  expected: {
+    status: 401,
+    message: { error: 'invalid token' },
+  },
+};
