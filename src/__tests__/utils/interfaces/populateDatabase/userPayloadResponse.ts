@@ -1,4 +1,5 @@
-import { Address, CompanyRole, User } from '../../../../entities';
+import { Address, User } from '../../../../entities';
+import { CompanyRole } from '../../../../types';
 
 export interface IUserPayloadResponse {
   payload: {
