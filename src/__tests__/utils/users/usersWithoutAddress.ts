@@ -35,14 +35,14 @@ export const userEmployeeWithoutAddress: IUserPayloadResponse = {
     email: 'kateausten@lost.com',
     isActive: false,
     isEmployee: true,
-    companyRole: CompanyRole.CLIENT,
+    companyRole: CompanyRole.EMPLOYEE,
     address: [] as Address[],
   } as User,
 };
 
 export const userManagerWithoutAddress: IUserPayloadResponse = {
   payload: {
-    name: 'Carlão do Pastel',
+    name: 'Carlão Do Pastel',
     email: 'carlaodopastel@mail.com',
     cpf: '555.555.555-55',
     password: '1234',
@@ -51,7 +51,7 @@ export const userManagerWithoutAddress: IUserPayloadResponse = {
   },
   response: {
     userId: '44444444-0000-4321-abcd-000000000000',
-    name: 'Carlão do Pastel',
+    name: 'Carlão Do Pastel',
     email: 'carlaodopastel@mail.com',
     isActive: false,
     isEmployee: true,
@@ -86,6 +86,7 @@ export const userClientWithoutAddress2: IUserPayloadResponse = {
     email: 'doejohnny@mail.com',
     cpf: '999.999.999-99',
     password: '1234',
+    companyRole: CompanyRole.CLIENT,
   },
   response: {
     userId: '12345678-0000-4321-abcd-000000000000',
@@ -94,6 +95,26 @@ export const userClientWithoutAddress2: IUserPayloadResponse = {
     isActive: false,
     isEmployee: false,
     companyRole: CompanyRole.CLIENT,
+    address: [] as Address[],
+  } as User,
+};
+
+export const userManagerWithoutAddress2: IUserPayloadResponse = {
+  payload: {
+    name: 'Januário Da Esquina',
+    email: 'januariodaesquina@mail.com',
+    cpf: '101.101.101-01',
+    password: '1234',
+    isEmployee: true,
+    companyRole: CompanyRole.MANAGER,
+  },
+  response: {
+    userId: '10101010-0000-4321-abcd-000000000000',
+    name: 'Januário Da Esquina',
+    email: 'januariodaesquina@mail.com',
+    isActive: false,
+    isEmployee: true,
+    companyRole: CompanyRole.MANAGER,
     address: [] as Address[],
   } as User,
 };

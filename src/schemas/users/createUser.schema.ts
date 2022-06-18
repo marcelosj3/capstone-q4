@@ -3,7 +3,7 @@ import { boolean, object, string, lazy, mixed } from 'yup';
 
 import { CompanyRole } from '../../types';
 import { capitalizeText, cpfMatches } from '../../utils';
-import { emailFormat } from '../../utils/users';
+import { companyRoleMatches, emailFormat } from '../../utils/users';
 import { createAddressSchema } from '../addresses';
 
 export const createUserSchema = object().shape({
@@ -18,7 +18,7 @@ export const createUserSchema = object().shape({
   isActive: boolean().default(false).optional(),
   isEmployee: boolean().default(false).optional(),
   companyRole: string()
-    .oneOf(Object.values(CompanyRole))
+    .oneOf(Object.values(CompanyRole), companyRoleMatches.message)
     .default(CompanyRole.CLIENT)
     .optional(),
   address: lazy((value) => {

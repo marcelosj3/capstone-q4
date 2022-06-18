@@ -3,7 +3,13 @@ import { DataSource } from 'typeorm';
 
 import { app } from '../../../app';
 import { AppDataSource } from '../../../data-source';
-import uuidMock from '../../__mocks__/uuid.mock';
+import { JWTMock, UUIDMock } from '../../__mocks__';
+import { insertOneUser } from '../../utils/populateDatabase';
+import {
+  userEmployeeWithAddress,
+  userManagerWithAddress,
+} from '../../utils/users/usersWithAddress';
+import { userAdminWithoutAddress } from '../../utils/users/usersWithoutAddress';
 import {
   createClientUserWithEmployeeToken,
   createEmployeeUserWithEmployeeToken,
@@ -11,7 +17,7 @@ import {
   createEmployeeUserWithMalformedJwt,
   createEmployeeUserWithManagerToken,
   createEmployeeUserWithoutToken,
-  createInvalidRoleUserWithValidUserToken,
+  createInvalidRoleUserWithAnyValidUserToken,
   createManagerUserWithAdminToken,
   createManagerUserWithManagerToken,
   createUserSuccessfuly,
@@ -44,6 +50,10 @@ describe(`POST ${ROUTE}`, () => {
       .catch((err) => {
         console.error('Error during test data source initialization', err);
       });
+
+    await insertOneUser(userEmployeeWithAddress);
+    await insertOneUser(userManagerWithAddress);
+    await insertOneUser(userAdminWithoutAddress);
   });
 
   afterAll(async () => {
@@ -80,7 +90,7 @@ describe(`POST ${ROUTE}`, () => {
   test('Should create an user successfully', async () => {
     const { user, payload, expected } = createUserSuccessfuly;
 
-    uuidMock.v4.mockReturnValueOnce(user.userId);
+    UUIDMock.v4.mockReturnValueOnce(user.userId);
 
     const response = await request(app).post(ROUTE).send(payload);
 
@@ -145,8 +155,8 @@ describe(`POST ${ROUTE}`, () => {
   test('Should create an user and address successfully', async () => {
     const { user, payload, expected } = createUserWithAddressSuccessfully;
 
-    uuidMock.v4.mockReturnValueOnce(user.address![0].addressId);
-    uuidMock.v4.mockReturnValueOnce(user.userId);
+    UUIDMock.v4.mockReturnValueOnce(user.address![0].addressId);
+    UUIDMock.v4.mockReturnValueOnce(user.userId);
 
     const response = await request(app).post(ROUTE).send(payload);
 
@@ -191,18 +201,25 @@ describe(`POST ${ROUTE}`, () => {
     const { userToCreate, tokenUser, payload, expected } =
       createClientUserWithEmployeeToken;
 
+    JWTMock.verify.mockImplementationOnce(() => true);
+    JWTMock.decode.mockReturnValueOnce({ id: tokenUser.userId });
+    UUIDMock.v4.mockReturnValueOnce(userToCreate.userId);
+
     const response = await request(app)
       .post(ROUTE)
       .set('Authorization', 'Bearer: valid.auth.token')
       .send(payload);
 
-    expect(response.status).toEqual(expected.status);
     expect(response.body).toEqual(expected.message);
+    expect(response.status).toEqual(expected.status);
   });
 
   test('Should not be able to create an employee user by having an employee token', async () => {
-    const { userToCreate, tokenUser, payload, expected } =
+    const { tokenUser, payload, expected } =
       createEmployeeUserWithEmployeeToken;
+
+    JWTMock.verify.mockImplementationOnce(() => true);
+    JWTMock.decode.mockReturnValueOnce({ id: tokenUser.userId });
 
     const response = await request(app)
       .post(ROUTE)
@@ -217,6 +234,10 @@ describe(`POST ${ROUTE}`, () => {
     const { userToCreate, tokenUser, payload, expected } =
       createEmployeeUserWithManagerToken;
 
+    JWTMock.verify.mockImplementationOnce(() => true);
+    JWTMock.decode.mockReturnValueOnce({ id: tokenUser.userId });
+    UUIDMock.v4.mockReturnValueOnce(userToCreate.userId);
+
     const response = await request(app)
       .post(ROUTE)
       .set('Authorization', 'Bearer: valid.auth.token')
@@ -227,8 +248,10 @@ describe(`POST ${ROUTE}`, () => {
   });
 
   test('Should not be able to create a manager user by having a manager token', async () => {
-    const { userToCreate, tokenUser, payload, expected } =
-      createManagerUserWithManagerToken;
+    const { tokenUser, payload, expected } = createManagerUserWithManagerToken;
+
+    JWTMock.verify.mockImplementationOnce(() => true);
+    JWTMock.decode.mockReturnValueOnce({ id: tokenUser.userId });
 
     const response = await request(app)
       .post(ROUTE)
@@ -243,25 +266,32 @@ describe(`POST ${ROUTE}`, () => {
     const { userToCreate, tokenUser, payload, expected } =
       createManagerUserWithAdminToken;
 
+    JWTMock.verify.mockImplementationOnce(() => true);
+    JWTMock.decode.mockReturnValueOnce({ id: tokenUser.userId });
+    UUIDMock.v4.mockReturnValueOnce(userToCreate.userId);
+
     const response = await request(app)
       .post(ROUTE)
       .set('Authorization', 'Bearer: valid.auth.token')
       .send(payload);
 
-    expect(response.status).toEqual(expected.status);
     expect(response.body).toEqual(expected.message);
+    expect(response.status).toEqual(expected.status);
   });
 
   test('Should receive a not valid company role error', async () => {
-    const { userToCreate, tokenUser, payload, expected } =
-      createInvalidRoleUserWithValidUserToken;
+    const { tokenUser, payload, expected } =
+      createInvalidRoleUserWithAnyValidUserToken;
+
+    JWTMock.verify.mockImplementationOnce(() => true);
+    JWTMock.decode.mockReturnValueOnce({ id: tokenUser.userId });
 
     const response = await request(app)
       .post(ROUTE)
       .set('Authorization', 'Bearer: valid.auth.token')
       .send(payload);
 
-    expect(response.status).toEqual(expected.status);
     expect(response.body).toEqual(expected.message);
+    expect(response.status).toEqual(expected.status);
   });
 });

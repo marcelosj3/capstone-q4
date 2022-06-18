@@ -19,7 +19,7 @@ import { verifyRolePermission } from '../utils';
  * @param {[CompanyRole]} authorizedRole A minimum role accordingly to the
  * permission levels above to be accepted for the required route.
  *
- * @param {[boolean]} requireValidateToken Default value to true, can be set to
+ * @param {[boolean]} [requireValidateToken="true"] OPTIONAL, DEFAULT: TRUE, can be set to
  * false so the route does not require a decoded key in the request parameter, useful
  * for routes that do not require a valid token for all its functions.
  */
@@ -35,14 +35,14 @@ export const verifyRoleMiddleware =
       );
     }
 
-    if (requireValidateToken) {
-      const { id } = decoded;
+    if (!requireValidateToken && !decoded) return next();
 
-      const user = await UserRepository.findOne({ userId: id });
-      const userRole = user?.companyRole;
+    const { id } = decoded;
 
-      verifyRolePermission(userRole!, authorizedRole);
-    }
+    const user = await UserRepository.findOne({ userId: id });
+    const userRole = user?.companyRole;
+
+    verifyRolePermission(userRole!, authorizedRole);
 
     return next();
   };

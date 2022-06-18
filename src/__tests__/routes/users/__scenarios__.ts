@@ -9,6 +9,7 @@ import {
   userClientWithoutAddress2,
   userEmployeeWithoutAddress,
   userManagerWithoutAddress,
+  userManagerWithoutAddress2,
 } from '../../utils/users/usersWithoutAddress';
 
 export const createUserWithMissingKeys = {
@@ -182,12 +183,11 @@ export const createClientUserWithEmployeeToken = {
 };
 
 export const createEmployeeUserWithEmployeeToken = {
-  userToCreate: userEmployeeWithoutAddress.response,
   tokenUser: userEmployeeWithAddress.response,
   payload: userEmployeeWithoutAddress.payload,
   expected: {
     status: 401,
-    message: { error: 'invalid token' },
+    message: { error: 'You have no permission to access this information' },
   },
 };
 
@@ -196,37 +196,38 @@ export const createEmployeeUserWithManagerToken = {
   tokenUser: userManagerWithAddress.response,
   payload: userEmployeeWithoutAddress.payload,
   expected: {
-    status: 401,
-    message: { error: 'invalid token' },
+    status: 201,
+    message: userEmployeeWithoutAddress.response,
   },
 };
 
 export const createManagerUserWithManagerToken = {
-  userToCreate: userManagerWithoutAddress.response,
   tokenUser: userManagerWithAddress.response,
   payload: userManagerWithoutAddress.payload,
   expected: {
     status: 401,
-    message: { error: 'invalid token' },
+    message: { error: 'You have no permission to access this information' },
   },
 };
 
 export const createManagerUserWithAdminToken = {
-  userToCreate: userManagerWithoutAddress.response,
+  userToCreate: userManagerWithoutAddress2.response,
   tokenUser: userAdminWithoutAddress.response,
-  payload: userManagerWithoutAddress.payload,
+  payload: userManagerWithoutAddress2.payload,
   expected: {
-    status: 401,
-    message: { error: 'invalid token' },
+    status: 201,
+    message: userManagerWithoutAddress2.response,
   },
 };
 
-export const createInvalidRoleUserWithValidUserToken = {
-  userToCreate: userManagerWithoutAddress.response,
+export const createInvalidRoleUserWithAnyValidUserToken = {
   tokenUser: userAdminWithoutAddress.response,
-  payload: userManagerWithoutAddress.payload,
+  payload: { ...userManagerWithoutAddress.payload, companyRole: 'cleaner' },
   expected: {
-    status: 401,
-    message: { error: 'invalid token' },
+    status: 400,
+    message: {
+      error: 'Invalid company role',
+      expected: ['client', 'employee', 'manager'],
+    },
   },
 };

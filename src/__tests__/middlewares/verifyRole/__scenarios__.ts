@@ -4,9 +4,11 @@ import { CompanyRole } from '../../../types';
 import {
   userAdminWithAddress,
   userEmployeeWithAddress,
+  userManagerWithAddress,
 } from '../../utils/users/usersWithAddress';
 import {
   userClientWithoutAddress,
+  userEmployeeWithoutAddress,
   userManagerWithoutAddress,
 } from '../../utils/users/usersWithoutAddress';
 
@@ -24,13 +26,28 @@ export const verifyRoleWithoutDecodedKey = {
 };
 
 export const verifyRoleWithDecodedKeyAndNoValidateTokenParameter = {
-  authorizedRole: CompanyRole.ADMIN,
+  authorizedRole: CompanyRole.EMPLOYEE,
   payload: {
     req: {
-      decoded: { id: userClientWithoutAddress.response.userId },
+      decoded: { id: userManagerWithAddress.response.userId },
     } as Request,
     res: {} as Response,
     next: jest.fn() as NextFunction,
+  },
+};
+
+export const verifyRoleWithDecodedKeyAndNoValidateTokenParameterToFail = {
+  authorizedRole: CompanyRole.MANAGER,
+  payload: {
+    req: {
+      decoded: { id: userEmployeeWithAddress.response.userId },
+    } as Request,
+    res: {} as Response,
+    next: jest.fn() as NextFunction,
+  },
+  expected: {
+    statusCode: 401,
+    message: { error: 'You have no permission to access this information' },
   },
 };
 
