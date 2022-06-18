@@ -8,7 +8,6 @@ import {
 } from '../../utils/users/usersWithAddress';
 import {
   userClientWithoutAddress,
-  userEmployeeWithoutAddress,
   userManagerWithoutAddress,
 } from '../../utils/users/usersWithoutAddress';
 

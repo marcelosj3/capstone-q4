@@ -16,6 +16,7 @@ jest.mock('jsonwebtoken', () => ({
   __esModule: true,
   ...jest.requireActual('jsonwebtoken'),
   verify: jest.fn(jest.requireActual('jsonwebtoken').verify),
+  decode: jest.fn(jest.requireActual('jsonwebtoken').decode),
 }));
 
 describe('Verify for certain keys in the body request and validate a token if they are present', () => {
