@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 
 import { createUserSchema } from '../../../schemas';
-import { cpfMatches } from '../../../utils';
+import { cpfMatches, emailFormat } from '../../../utils';
 import { userClientWithAddress } from '../../utils/users/usersWithAddress';
 import { userClientWithoutAddress } from '../../utils/users/usersWithoutAddress';
 
@@ -65,11 +65,7 @@ export const validateSchemaWithInvalidEmailFormat = {
   },
   expected: {
     status: 400,
-    // TODO change for the emailFormat object once we have it
-    message: {
-      error: 'Invalid email format',
-      expected: 'mail@domain.com',
-    },
+    message: emailFormat.message,
   },
 };
 
@@ -106,14 +102,7 @@ export const validateSchemaWithInvalidCPFAndEmailFormat = {
   },
   expected: {
     status: 400,
-    message: [
-      // TODO change for the emailFormat object once we have it
-      {
-        error: 'Invalid email format',
-        expected: 'mail@domain.com',
-      },
-      cpfMatches.message,
-    ],
+    message: [emailFormat.message, cpfMatches.message],
   },
 };
 
