@@ -5,7 +5,6 @@ import { AppDataSource } from '../../../data-source';
 import { AppError } from '../../../errors';
 import { validateTokenMiddleware } from '../../../middlewares';
 import { JWTMock } from '../../__mocks__';
-import './__scenarios__';
 import {
   validateTokenSuccessfully,
   validateTokenWithInvalidToken,

@@ -16,7 +16,7 @@ export const validateSchemaMiddleware =
       req.validated = validated;
 
       return next();
-    } catch (error) {
+    } catch (error: any) {
       const errorMessage = yupErrorsMessage(error);
 
       throw new AppError(errorMessage, 400);
