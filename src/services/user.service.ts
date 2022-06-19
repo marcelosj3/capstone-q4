@@ -6,7 +6,6 @@ import { AppDataSource } from '../data-source';
 import { Address, User } from '../entities';
 import { AppError } from '../errors';
 import { UserRepository } from '../repositories';
-import userRepository from '../repositories/user.repository';
 import { serializedCreatedUserSchema } from '../schemas';
 
 class UserService {
@@ -86,15 +85,14 @@ class UserService {
   };
 
   patch = async ({ user, body }: Request) => {
-    if (
-      !!body.oldPassword &&
-      !(await compare(user.password, body.oldPassword))
-    ) {
-      throw new AppError({ error: 'Invalid old password' }, 401);
+    if (!!body.oldPassword) {
+      if (!(await compare(user.password, body.oldPassword))) {
+        throw new AppError({ error: 'Invalid old password' }, 401);
+      }
+      const updatedUser = await UserRepository.update(String(user.userId), {
+        ...body,
+      });
     }
-    const updatedUser = await userRepository.update(String(user.userId), {
-      ...body,
-    });
     return { statusCode: 200, message: { ...user, ...body } };
   };
 
