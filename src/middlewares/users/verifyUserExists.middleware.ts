@@ -1,8 +1,8 @@
 import { NextFunction, Request, Response } from 'express';
 
-import { User } from '../entities';
-import { AppError } from '../errors';
-import { UserRepository } from '../repositories';
+import { User } from '../../entities';
+import { AppError } from '../../errors';
+import { UserRepository } from '../../repositories';
 
 export const verifyUserExistsMiddleware = async (
   req: Request,

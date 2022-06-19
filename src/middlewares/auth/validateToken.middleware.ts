@@ -1,8 +1,8 @@
 import { NextFunction, Request, Response } from 'express';
 import { JwtPayload, verify } from 'jsonwebtoken';
 
-import { User } from '../entities';
-import { AppError } from '../errors';
+import { User } from '../../entities';
+import { AppError } from '../../errors';
 
 export const validateTokenMiddleware = async (
   req: Request,

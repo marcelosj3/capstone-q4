@@ -1,8 +1,8 @@
 import { NextFunction, Request, Response } from 'express';
 
-import { UserRepository } from '../repositories';
-import { CompanyRole } from '../types';
-import { verifyRolePermission } from '../utils';
+import { UserRepository } from '../../repositories';
+import { CompanyRole } from '../../types';
+import { verifyRolePermission } from '../../utils';
 
 /**
  * It verifies the permission each user has and compares with the authorizedRole
