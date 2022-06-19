@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 
 import { createUserSchema } from '../../../schemas';
+import { cpfMatches } from '../../../utils';
 import { userClientWithAddress } from '../../utils/users/usersWithAddress';
 import { userClientWithoutAddress } from '../../utils/users/usersWithoutAddress';
 
@@ -64,6 +65,7 @@ export const validateSchemaWithInvalidEmailFormat = {
   },
   expected: {
     status: 400,
+    // TODO change for the emailFormat object once we have it
     message: {
       error: 'Invalid email format',
       expected: 'mail@domain.com',
@@ -85,10 +87,7 @@ export const validateSchemaWithInvalidCPFFormat = {
   },
   expected: {
     status: 400,
-    message: {
-      error: 'Invalid CPF format',
-      expected: 'XXX.XXX.XXX-XX',
-    },
+    message: cpfMatches.message,
   },
 };
 
@@ -108,14 +107,12 @@ export const validateSchemaWithInvalidCPFAndEmailFormat = {
   expected: {
     status: 400,
     message: [
+      // TODO change for the emailFormat object once we have it
       {
         error: 'Invalid email format',
         expected: 'mail@domain.com',
       },
-      {
-        error: 'Invalid CPF format',
-        expected: 'XXX.XXX.XXX-XX',
-      },
+      cpfMatches.message,
     ],
   },
 };
@@ -137,10 +134,7 @@ export const validateSchemaWithInvalidCPFFormatAndMissingKeys = {
   expected: {
     status: 400,
     message: [
-      {
-        error: 'Invalid CPF format',
-        expected: 'XXX.XXX.XXX-XX',
-      },
+      cpfMatches.message,
       {
         error: 'Missing keys',
         requiredFields: [
@@ -216,10 +210,7 @@ export const validateSchemaWithSuccessfully = {
   expected: {
     status: 400,
     message: [
-      {
-        error: 'Invalid CPF format',
-        expected: 'XXX.XXX.XXX-XX',
-      },
+      cpfMatches.message,
       {
         error: 'Missing keys',
         requiredFields: [

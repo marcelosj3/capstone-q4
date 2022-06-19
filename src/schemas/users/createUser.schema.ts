@@ -8,7 +8,9 @@ import { createAddressSchema } from '../addresses';
 export const createUserSchema = object().shape({
   name: string().required(),
   email: string().email().lowercase().required(),
-  cpf: string().matches(cpfMatches.regex, cpfMatches.message).required(),
+  cpf: string()
+    .matches(cpfMatches.regex, { message: cpfMatches.message })
+    .required(),
   password: string()
     .min(6, 'At least 6 characters required')
     .transform((pwd: string) => hashSync(pwd, 8))

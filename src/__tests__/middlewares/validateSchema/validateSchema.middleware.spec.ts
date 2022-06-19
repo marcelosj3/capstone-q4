@@ -82,6 +82,7 @@ describe('Validate a schema', () => {
       expect(error.message).toEqual(expected.message);
     }
 
+    expect(schemaShape.validate).toBeCalled();
     expect(next).not.toBeCalled();
   });
 
@@ -106,6 +107,7 @@ describe('Validate a schema', () => {
       expect(error.message).toEqual(expected.message);
     }
 
+    expect(schemaShape.validate).toBeCalled();
     expect(next).not.toBeCalled();
   });
 
@@ -125,11 +127,13 @@ describe('Validate a schema', () => {
     try {
       await validateSchemaMiddleware(schemaShape)(req, res, next);
     } catch (error: any) {
+      error;
       expect(error).toBeInstanceOf(AppError);
       expect(error.statusCode).toEqual(expected.status);
       expect(error.message).toEqual(expected.message);
     }
 
+    expect(schemaShape.validate).toBeCalled();
     expect(next).not.toBeCalled();
   });
 
@@ -155,6 +159,7 @@ describe('Validate a schema', () => {
       expect(error.message).toEqual(expected.message);
     }
 
+    expect(schemaShape.validate).toBeCalled();
     expect(next).not.toBeCalled();
   });
 
@@ -181,6 +186,7 @@ describe('Validate a schema', () => {
       expect(error.message).toEqual(expected.message);
     }
 
+    expect(schemaShape.validate).toBeCalled();
     expect(next).not.toBeCalled();
   });
 
@@ -206,6 +212,7 @@ describe('Validate a schema', () => {
       expect(error.message).toEqual(expected.message);
     }
 
+    expect(schemaShape.validate).toBeCalled();
     expect(next).not.toBeCalled();
   });
 
@@ -230,6 +237,7 @@ describe('Validate a schema', () => {
       expect(error.message).toEqual(expected.message);
     }
 
+    expect(schemaShape.validate).toBeCalled();
     expect(next).not.toBeCalled();
   });
 
@@ -243,6 +251,7 @@ describe('Validate a schema', () => {
       await validateSchemaMiddleware(schemaShape)(req, res, next);
     } catch (error: any) {}
 
+    expect(schemaShape.validate).toBeCalled();
     expect(next).toBeCalled();
   });
 });
