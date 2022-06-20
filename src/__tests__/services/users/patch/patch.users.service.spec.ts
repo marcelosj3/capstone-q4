@@ -80,16 +80,4 @@ describe('Patch an user', () => {
       expect(error.message).not.toEqual({ error: 'Invalid old passwords' });
     }
   });
-  // test('Should pactch an user email and password sucessfully', async () => {
-  //   const { user, expected, body } = patchUserEmailAndPassword;
-  //   BcryptMock.compare.mockResolvedValueOnce(true);
-  //   try {
-  //     const result = await UserService.patch({ user, body } as Request);
-  //     expect(result.statusCode).toEqual(expected.status);
-  //     expect(result.message).toEqual(expected.message);
-  //   } catch (error: any) {
-  //     expect(error.status).not.toEqual(401);
-  //     expect(error.message).not.toEqual({ error: 'Invalid old passwords' });
-  //   }
-  // });
 });

@@ -110,23 +110,3 @@ export const patchUserEmailAndPassword = {
     } as User,
   },
 };
-
-// export const patchUserEmailWithoutOldPassword = {
-//   user: {
-//     userId: '11111111-0000-4321-abcd-000000000000',
-//     name: 'John Doe',
-//     email: 'johndoe@mail.com',
-//     cpf: '111.111.111-11',
-//     password: '1234',
-//   } as User,
-//   body: {
-//     email: 'claramente.existe@mail.com',
-//     password: '4321',
-//   },
-//   expected: {
-//     status: 401,
-//     message: {
-//       error: 'invalid credentials',
-//     },
-//   },
-// };

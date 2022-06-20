@@ -31,7 +31,7 @@ export const userRoutes = (): Router => {
 
   router.get('', validateTokenMiddleware, UserController.getAll);
 
-  router.delete(
+  router.patch(
     '/me',
     validateSchemaMiddleware(updateUserSchema),
     validateTokenMiddleware,
