@@ -1,4 +1,11 @@
+export { validateTokenMiddleware } from './auth';
+
 export { errorMiddleware } from './errors/error.middleware';
-export { validateSchemaMiddleware } from './validateSchema.middleware';
-export { validateTokenMiddleware } from './validateToken.middleware';
-export { verifyUserExistsMiddleware } from './verifyUserExists.middleware';
+
+export { validateSchemaMiddleware } from './schema';
+
+export {
+  getUserByIdOr404Middleware,
+  verifyRoleMiddleware,
+  verifyUserExistsMiddleware,
+} from './users';

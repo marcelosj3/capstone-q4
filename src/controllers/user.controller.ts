@@ -17,6 +17,16 @@ class UserController {
     const { statusCode, message } = await UserService.getAll();
     return res.status(statusCode).json(message);
   };
+
+  patch = async (req: Request, res: Response) => {
+    const { statusCode, message } = await UserService.patch(req);
+    return res.status(statusCode).json(message);
+  };
+
+  delete = async (req: Request, res: Response) => {
+    const { statusCode } = await UserService.delete(req);
+    return res.status(statusCode).send();
+  };
 }
 
 export default new UserController();

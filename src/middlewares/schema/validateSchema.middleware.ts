@@ -1,8 +1,8 @@
 import { NextFunction, Request, Response } from 'express';
 import { AnySchema } from 'yup';
 
-import { AppError } from '../errors';
-import { yupErrorsMessage } from '../utils';
+import { AppError } from '../../errors';
+import { yupErrorsMessage } from '../../utils';
 
 export const validateSchemaMiddleware =
   (shape: AnySchema) =>

@@ -1,3 +1,4 @@
+import { compare } from 'bcrypt';
 import { Request } from 'express';
 import { sign } from 'jsonwebtoken';
 
@@ -58,9 +59,13 @@ class UserService {
       throw new AppError({ error: 'invalid credentials' }, 401);
     }
 
-    const token: string = sign({ ...user }, String(process.env.SECRET_KEY), {
-      expiresIn: process.env.EXPIRES_IN,
-    });
+    const token: string = sign(
+      { id: user.userId },
+      String(process.env.SECRET_KEY),
+      {
+        expiresIn: process.env.EXPIRES_IN,
+      }
+    );
 
     return { statusCode: 200, message: { token } };
   };
@@ -77,6 +82,24 @@ class UserService {
     );
 
     return { statusCode: 200, message: serializedUsers };
+  };
+
+  patch = async ({ user, body }: Request) => {
+    if (!!body.oldPassword) {
+      if (!(await compare(user.password, body.oldPassword))) {
+        throw new AppError({ error: 'Invalid old password' }, 401);
+      }
+      const updatedUser = await UserRepository.update(String(user.userId), {
+        ...body,
+      });
+    }
+    return { statusCode: 200, message: { ...user, ...body } };
+  };
+
+  delete = async ({ user }: Request) => {
+    await UserRepository.delete(String(user.userId));
+
+    return { statusCode: 204 };
   };
 }
 

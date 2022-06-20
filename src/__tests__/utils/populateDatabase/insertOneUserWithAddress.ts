@@ -10,8 +10,8 @@ export const insertOneUserWithAddress = async (user: IUserPayloadResponse) => {
 
   const { address } = payload;
 
-  UUIDMock.v4.mockReturnValueOnce(response.userId);
   UUIDMock.v4.mockReturnValueOnce(response.address[0].addressId);
+  UUIDMock.v4.mockReturnValueOnce(response.userId);
 
   delete payload.address;
 

@@ -1,4 +1,5 @@
-import { CompanyRole, User } from '../../../entities';
+import { User } from '../../../entities';
+import { CompanyRole } from '../../../types';
 import { IUserPayloadResponse } from '../interfaces/populateDatabase';
 
 export const userClientWithAddress: IUserPayloadResponse = {
@@ -21,6 +22,9 @@ export const userClientWithAddress: IUserPayloadResponse = {
     userId: '11111111-0000-4321-abcd-000000000000',
     name: 'Davey Struss',
     email: 'daveystruss@mail.com',
+    isActive: false,
+    isEmployee: false,
+    companyRole: CompanyRole.CLIENT,
     address: [
       {
         addressId: '00000000-1111-4321-abcd-000000000000',
@@ -59,8 +63,9 @@ export const userEmployeeWithAddress: IUserPayloadResponse = {
     userId: '33333333-0000-4321-abcd-000000000000',
     name: 'Juliet Burke',
     email: 'julietburke@mail.com',
+    isActive: false,
     isEmployee: true,
-    companyRole: 'employee',
+    companyRole: CompanyRole.EMPLOYEE,
     address: [
       {
         addressId: '11111111-1111-4321-abcd-000000000000',
@@ -99,8 +104,9 @@ export const userManagerWithAddress: IUserPayloadResponse = {
     userId: '55555555-0000-4321-abcd-000000000000',
     name: 'Cramu Nhao',
     email: 'cramunhao@mail.com',
+    isActive: false,
     isEmployee: true,
-    companyRole: 'manager',
+    companyRole: CompanyRole.MANAGER,
     address: [
       {
         addressId: '22222222-1111-4321-abcd-000000000000',
@@ -139,8 +145,9 @@ export const userAdminWithAddress: IUserPayloadResponse = {
     userId: '77777777-0000-4321-abcd-000000000000',
     name: 'Gi Sus',
     email: 'gisus@cloud.com',
+    isActive: false,
     isEmployee: true,
-    companyRole: 'admin',
+    companyRole: CompanyRole.ADMIN,
     address: [
       {
         addressId: '33333333-1111-4321-abcd-000000000000',
