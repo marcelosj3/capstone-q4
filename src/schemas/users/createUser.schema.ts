@@ -2,8 +2,8 @@ import { hashSync } from 'bcrypt';
 import { boolean, object, string, lazy, mixed } from 'yup';
 
 import { CompanyRole } from '../../types';
-import { capitalizeText, cpfMatches } from '../../utils';
-import { companyRoleMatches, emailFormat } from '../../utils/users';
+import { companyRoleMatches, cpfMatches, emailFormat } from '../../utils';
+import { capitalizeText } from '../../utils/generics';
 import { createAddressSchema } from '../addresses';
 
 export const createUserSchema = object().shape({
@@ -11,7 +11,9 @@ export const createUserSchema = object().shape({
     .required()
     .transform((name: string) => capitalizeText(name)),
   email: string().email(emailFormat.message).lowercase().required(),
-  cpf: string().matches(cpfMatches.regex, cpfMatches.message).required(),
+  cpf: string()
+    .matches(cpfMatches.regex, { message: cpfMatches.message })
+    .required(),
   password: string()
     .transform((pwd: string) => hashSync(pwd, 8))
     .required(),

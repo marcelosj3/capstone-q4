@@ -8,4 +8,9 @@ export { capitalizeText } from './generics';
 
 export { cnpjMatches, expiryDateMatches } from './products';
 
-export { cpfMatches, verifyRolePermission } from './users';
+export {
+  companyRoleMatches,
+  cpfMatches,
+  emailFormat,
+  verifyRolePermission,
+} from './users';
