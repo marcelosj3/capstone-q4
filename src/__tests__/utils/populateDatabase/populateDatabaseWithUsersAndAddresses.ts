@@ -1,10 +1,11 @@
+import { IUserPayloadResponse } from '../interfaces/populateDatabase';
 import { userListWithAddress } from '../users';
-import { insertOneUserWithAddress } from './insertOneUserWithAddress';
+import { insertOneUser } from './insertOneUser';
 
 export const populateDatabaseWithUsersAndAddresses = async () => {
-  await Promise.all(
-    userListWithAddress.map(
-      async (user) => await insertOneUserWithAddress(user)
-    )
-  );
+  for (let i = 0; i < userListWithAddress.length; i++) {
+    const user: IUserPayloadResponse = userListWithAddress[i];
+
+    await insertOneUser(user);
+  }
 };

@@ -1,6 +1,6 @@
 import { array, boolean, object, string } from 'yup';
 
-import { CompanyRole } from '../../entities';
+import { CompanyRole } from '../../types';
 import { serializedCreatedAddressSchema } from '../addresses';
 
 export const serializedCreatedUserSchema = object().shape({
