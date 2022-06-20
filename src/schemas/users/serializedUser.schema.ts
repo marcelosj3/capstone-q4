@@ -1,4 +1,4 @@
-import { boolean, object, string, array } from 'yup';
+import { array, boolean, object, string } from 'yup';
 
 import { CompanyRole } from '../../types';
 import { serializedCreatedAddressSchema } from '../addresses';

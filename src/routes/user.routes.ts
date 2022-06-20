@@ -10,7 +10,11 @@ import {
 } from '../middlewares';
 import { verifyForKeyInBodyAndValidateToken } from '../middlewares/users/verifyForKeyInBodyAndValidateToken.middleware';
 import { verifyRolePermissionMiddleware } from '../middlewares/users/verifyRolePermission.middleware';
-import { createUserSchema, loginUserSchema } from '../schemas';
+import {
+  createUserSchema,
+  loginUserSchema,
+  updateUserSchema,
+} from '../schemas';
 import { CompanyRole } from '../types';
 
 const router: Router = Router();
@@ -36,6 +40,14 @@ export const userRoutes = (): Router => {
     validateTokenMiddleware,
     verifyRoleMiddleware(CompanyRole.EMPLOYEE),
     UserController.getAll
+  );
+
+  router.patch(
+    '/me',
+    validateSchemaMiddleware(updateUserSchema),
+    validateTokenMiddleware,
+    getUserByIdOr404Middleware,
+    UserController.patch
   );
 
   router.delete(

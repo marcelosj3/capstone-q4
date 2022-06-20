@@ -1,3 +1,4 @@
+import { compare } from 'bcrypt';
 import { Request } from 'express';
 import { sign } from 'jsonwebtoken';
 
@@ -81,6 +82,18 @@ class UserService {
     );
 
     return { statusCode: 200, message: serializedUsers };
+  };
+
+  patch = async ({ user, body }: Request) => {
+    if (!!body.oldPassword) {
+      if (!(await compare(user.password, body.oldPassword))) {
+        throw new AppError({ error: 'Invalid old password' }, 401);
+      }
+      const updatedUser = await UserRepository.update(String(user.userId), {
+        ...body,
+      });
+    }
+    return { statusCode: 200, message: { ...user, ...body } };
   };
 
   delete = async ({ user }: Request) => {

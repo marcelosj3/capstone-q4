@@ -1,3 +1,4 @@
+import { hash } from 'bcrypt';
 import { DeleteResult, Repository } from 'typeorm';
 
 import { AppDataSource } from '../data-source';
@@ -20,6 +21,12 @@ class UserRepository {
       where: { ...payload },
       relations: ['address'],
     });
+  };
+  update = async (uuid: string, payload: Partial<User>) => {
+    if (payload.password) {
+      payload.password = await hash(payload.password, 10);
+    }
+    return await this.repo.update(uuid, { ...payload });
   };
 
   save = async (user: User): Promise<User> => await this.repo.save(user);
