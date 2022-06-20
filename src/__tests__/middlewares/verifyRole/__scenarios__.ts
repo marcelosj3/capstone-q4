@@ -4,12 +4,60 @@ import { CompanyRole } from '../../../types';
 import {
   userAdminWithAddress,
   userEmployeeWithAddress,
+  userManagerWithAddress,
 } from '../../utils/users/usersWithAddress';
 import {
   userClientWithoutAddress,
-  userEmployeeWithoutAddress,
   userManagerWithoutAddress,
 } from '../../utils/users/usersWithoutAddress';
+
+export const verifyRoleWithoutDecodedKey = {
+  authorizedRole: CompanyRole.ADMIN,
+  payload: {
+    req: {} as Request,
+    res: {} as Response,
+    next: jest.fn() as NextFunction,
+  },
+  expected: {
+    statusCode: 400,
+    message: { error: 'A valid token is required to proceed' },
+  },
+};
+
+export const verifyRoleWithDecodedKeyAndNoValidateTokenParameter = {
+  authorizedRole: CompanyRole.EMPLOYEE,
+  payload: {
+    req: {
+      decoded: { id: userManagerWithAddress.response.userId },
+    } as Request,
+    res: {} as Response,
+    next: jest.fn() as NextFunction,
+  },
+};
+
+export const verifyRoleWithDecodedKeyAndNoValidateTokenParameterToFail = {
+  authorizedRole: CompanyRole.MANAGER,
+  payload: {
+    req: {
+      decoded: { id: userEmployeeWithAddress.response.userId },
+    } as Request,
+    res: {} as Response,
+    next: jest.fn() as NextFunction,
+  },
+  expected: {
+    statusCode: 401,
+    message: { error: 'You have no permission to access this information' },
+  },
+};
+
+export const verifyRoleWithoutDecodedKeyAndNoValidateTokenParameter = {
+  authorizedRole: CompanyRole.ADMIN,
+  payload: {
+    req: {} as Request,
+    res: {} as Response,
+    next: jest.fn() as NextFunction,
+  },
+};
 
 export const verifyRoleAdminAsUserClient = {
   authorizedRole: CompanyRole.ADMIN,

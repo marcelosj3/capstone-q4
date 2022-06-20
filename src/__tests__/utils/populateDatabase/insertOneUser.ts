@@ -1,14 +1,20 @@
-import { User } from '../../../entities';
-import { UserRepository } from '../../../repositories';
-import { UUIDMock } from '../../__mocks__';
 import { IUserPayloadResponse } from '../interfaces/populateDatabase';
+import { insertOneUserWithAddress } from './insertOneUserWithAddress';
+import { insertOneUserWithoutAddress } from './insertOneUserWithoutAddress';
 
+/**
+ * Insert one user from the userList,
+ * the user must contain both the payload
+ * and response keys in the object to be able
+ * to insert.
+ *
+ * @param {[IUserPayloadResponse]} user object containing
+ * payload and response keys.
+ */
 export const insertOneUser = async (user: IUserPayloadResponse) => {
-  const { payload, response } = user;
+  const hasAddress = !!user.payload.address;
 
-  const userCreate = UserRepository.create(payload as User);
+  if (hasAddress) return insertOneUserWithAddress(user);
 
-  UUIDMock.v4.mockReturnValueOnce(response.userId);
-
-  return await UserRepository.save(userCreate as User);
+  return insertOneUserWithoutAddress(user);
 };
