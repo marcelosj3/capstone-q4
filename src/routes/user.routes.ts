@@ -5,11 +5,11 @@ import {
   getUserByIdOr404Middleware,
   validateSchemaMiddleware,
   validateTokenMiddleware,
+  verifyForKeyInBodyAndValidateToken,
   verifyRoleMiddleware,
+  verifyRolePermissionMiddleware,
   verifyUserExistsMiddleware,
 } from '../middlewares';
-import { verifyForKeyInBodyAndValidateToken } from '../middlewares/users/verifyForKeyInBodyAndValidateToken.middleware';
-import { verifyRolePermissionMiddleware } from '../middlewares/users/verifyRolePermission.middleware';
 import {
   createUserSchema,
   loginUserSchema,
@@ -45,8 +45,9 @@ export const userRoutes = (): Router => {
   router.patch(
     '/me',
     validateSchemaMiddleware(updateUserSchema),
+    verifyUserExistsMiddleware,
     validateTokenMiddleware,
-    getUserByIdOr404Middleware,
+    verifyRolePermissionMiddleware,
     UserController.patch
   );
 
