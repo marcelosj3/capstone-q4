@@ -14,7 +14,7 @@ import {
   cartToSerialize,
   reduceCartTotalPrice,
   shippingFeeCalculator,
-} from '../utils/';
+} from '../utils';
 
 class CartService {
   insertProduct = async ({ validated, decoded }: Request) => {

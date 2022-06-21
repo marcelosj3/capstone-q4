@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 
 import { createUserSchema } from '../../../schemas';
-import { cpfMatches, emailFormat } from '../../../utils';
+import { cpfMatches, emailFormat } from '../../../utils/users';
 import { userClientWithAddress } from '../../utils/users/usersWithAddress';
 import { userClientWithoutAddress } from '../../utils/users/usersWithoutAddress';
 

@@ -1,2 +1,1 @@
-export { cnpjMatches } from './cnpjRegex.util';
-export { expiryDateMatches } from './expiryDateRegex.util';
+export { expiryDateMatches } from './expiryDateMatches.util';

@@ -2,12 +2,8 @@ import { hashSync } from 'bcrypt';
 import { boolean, object, string } from 'yup';
 
 import { CompanyRole } from '../../types';
-import {
-  capitalizeText,
-  companyRoleMatches,
-  cpfMatches,
-  emailFormat,
-} from '../../utils';
+import { companyRoleMatches, cpfMatches, emailFormat } from '../../utils/';
+import { capitalizeText } from '../../utils/generics/capitalizeText.util';
 
 export const updateUserSchema = object().shape({
   name: string()
