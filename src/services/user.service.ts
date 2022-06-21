@@ -6,7 +6,7 @@ import { AppDataSource } from '../data-source';
 import { Address, User } from '../entities';
 import { AppError } from '../errors';
 import { UserRepository } from '../repositories';
-import { serializedCreatedUserSchema } from '../schemas';
+import { serializedUserSchema } from '../schemas';
 
 class UserService {
   create = async ({ validated }: Request) => {
@@ -39,7 +39,7 @@ class UserService {
       });
     }
 
-    const serializedUser = await serializedCreatedUserSchema.validate(user, {
+    const serializedUser = await serializedUserSchema.validate(user, {
       stripUnknown: true,
     });
 
@@ -47,7 +47,7 @@ class UserService {
   };
 
   login = async ({ validated }: Request) => {
-    const user = await UserRepository.findOne({
+    const user = await UserRepository.findOneWithAddress({
       email: validated.email,
     });
 
@@ -75,7 +75,7 @@ class UserService {
     const serializedUsers = await Promise.all(
       users.map(
         async (user: User) =>
-          await serializedCreatedUserSchema.validate(user, {
+          await serializedUserSchema.validate(user, {
             stripUnknown: true,
           })
       )
@@ -84,16 +84,53 @@ class UserService {
     return { statusCode: 200, message: serializedUsers };
   };
 
-  patch = async ({ user, body }: Request) => {
-    if (!!body.oldPassword) {
-      if (!(await compare(user.password, body.oldPassword))) {
+  patch = async ({ decoded, validated }: Request) => {
+    const user = await UserRepository.findOne({
+      userId: decoded.id,
+    });
+
+    if (!user) throw new AppError({ error: 'User not found' }, 404);
+
+    if (Object.keys(validated).length == 0) {
+      const serializedUser = await serializedUserSchema.validate(user, {
+        stripUnknown: true,
+      });
+
+      return { statusCode: 200, message: serializedUser };
+    }
+
+    if (!!validated.password && !validated.oldPassword)
+      throw new AppError(
+        {
+          error: 'Missing old password key',
+          description:
+            "In order to update the password, an 'oldPassword' key is necessary",
+        },
+        401
+      );
+
+    if (!!validated.oldPassword) {
+      if (!(await compare(user.password, validated.oldPassword))) {
         throw new AppError({ error: 'Invalid old password' }, 401);
       }
-      const updatedUser = await UserRepository.update(String(user.userId), {
-        ...body,
-      });
+
+      delete validated.oldPassword;
     }
-    return { statusCode: 200, message: { ...user, ...body } };
+
+    await UserRepository.update(user.userId as string, {
+      ...(validated as unknown as User),
+    });
+
+    const updatedUser = await UserRepository.findOne({
+      userId: user.userId,
+    });
+
+    const serializedUpdateUser = await serializedUserSchema.validate(
+      updatedUser,
+      { stripUnknown: true }
+    );
+
+    return { statusCode: 200, message: serializedUpdateUser };
   };
 
   delete = async ({ user }: Request) => {
