@@ -12,7 +12,8 @@ class CartRepository {
 
   create = (cart: Partial<Cart>) => this.repo.create(cart);
 
-  findOne = (uuid: string) => this.repo.findOne({ where: { cartId: uuid } });
+  findOne = async (uuid: string) =>
+    await this.repo.findOne({ where: { cartId: uuid } });
 
   save = async (cart: Cart) => await this.repo.save(cart);
 

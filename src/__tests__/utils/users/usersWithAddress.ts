@@ -23,7 +23,6 @@ export const userClientWithAddress: IUserPayloadResponse = {
     name: 'Davey Struss',
     email: 'daveystruss@mail.com',
     isActive: false,
-    isEmployee: false,
     companyRole: CompanyRole.CLIENT,
     address: [
       {
@@ -47,7 +46,6 @@ export const userEmployeeWithAddress: IUserPayloadResponse = {
     email: 'julietburke@mail.com',
     cpf: '444.444.444-44',
     password: '1234',
-    isEmployee: true,
     companyRole: CompanyRole.EMPLOYEE,
     address: {
       state: 'Maranhão',
@@ -64,7 +62,6 @@ export const userEmployeeWithAddress: IUserPayloadResponse = {
     name: 'Juliet Burke',
     email: 'julietburke@mail.com',
     isActive: false,
-    isEmployee: true,
     companyRole: CompanyRole.EMPLOYEE,
     address: [
       {
@@ -88,7 +85,6 @@ export const userManagerWithAddress: IUserPayloadResponse = {
     email: 'cramunhao@mail.com',
     cpf: '666.666.666-66',
     password: '1234',
-    isEmployee: true,
     companyRole: CompanyRole.MANAGER,
     address: {
       state: 'Espírito Santo',
@@ -105,7 +101,6 @@ export const userManagerWithAddress: IUserPayloadResponse = {
     name: 'Cramu Nhao',
     email: 'cramunhao@mail.com',
     isActive: false,
-    isEmployee: true,
     companyRole: CompanyRole.MANAGER,
     address: [
       {
@@ -129,7 +124,6 @@ export const userAdminWithAddress: IUserPayloadResponse = {
     email: 'gisus@cloud.com',
     cpf: '888.888.888-88',
     password: '1234',
-    isEmployee: true,
     companyRole: CompanyRole.ADMIN,
     address: {
       state: 'São Paulo',
@@ -146,7 +140,6 @@ export const userAdminWithAddress: IUserPayloadResponse = {
     name: 'Gi Sus',
     email: 'gisus@cloud.com',
     isActive: false,
-    isEmployee: true,
     companyRole: CompanyRole.ADMIN,
     address: [
       {
