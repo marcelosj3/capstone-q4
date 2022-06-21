@@ -1,7 +1,7 @@
 import { object, string } from 'yup';
 
-import { productStockSchema } from './productStock.schema';
-import { productSupplierSchema } from './productSupplier.schema';
+import { productStockSchema } from '../stocks/productStock.schema';
+import { productSupplierSchema } from '../suppliers/productSupplier.schema';
 
 export const serializedProductSchema = object().shape({
   productId: string().uuid(),

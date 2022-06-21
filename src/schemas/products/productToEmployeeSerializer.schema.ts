@@ -1,27 +1,7 @@
-import { boolean, number, object, string } from 'yup';
+import { boolean, object, string } from 'yup';
 
 import { expiryDateMatches } from '../../utils';
-
-const employeeProductStockSchema = object().shape({
-  stockId: string().uuid().required(),
-  increaseValuePercentage: number().required(),
-  isAvailable: boolean().required(),
-  quantity: number().integer().required(),
-  unityValueToSell: number().required(),
-})
-
-// "stock": {
-//   "stockId": "stockId-uuid",
-//   "increaseValuePercentage": 50,
-//   "isAvailable": true,
-//   "quantity": 40,
-//   "unityValueToSell": 3.00,
-//   "supplier": {
-//       "supplierId": "supplierId",
-//       "name":	"Fornecedora de leite",
-//       "cnpj": "94.242.943/0001-74"
-//   }
-// }
+import { employeeProductStockSchema } from '../stocks';
 
 export const productToEmployeeSerializerSchema = object().shape({
   productId: string().uuid().required(),
@@ -32,7 +12,6 @@ export const productToEmployeeSerializerSchema = object().shape({
   expiryDate: string()
     .matches(expiryDateMatches.regex, expiryDateMatches.message)
     .notRequired(),
-  quantity: number().integer().required(),
-  unityValueToSell: number().required(),
   onSale: boolean().default(false).optional(),
+  stock: employeeProductStockSchema.required(),
 });
