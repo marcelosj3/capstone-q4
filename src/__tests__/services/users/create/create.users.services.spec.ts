@@ -37,8 +37,7 @@ describe('Creating an user', () => {
     const result = await UserService.create(payload);
 
     expect(result.statusCode).toEqual(expected.status);
-    expect(result.message).toHaveProperty('address');
-    expect(result.message.address).toEqual([]);
+    expect(result.message).not.toHaveProperty('address');
     expect(result.message.userId).toEqual(expected.message.userId);
     expect(result.message.name).toEqual(expected.message.name);
     expect(result.message.email).toEqual(expected.message.email);
