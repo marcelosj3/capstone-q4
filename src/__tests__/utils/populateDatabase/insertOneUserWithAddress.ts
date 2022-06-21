@@ -1,6 +1,6 @@
 import { Address, User } from '../../../entities';
 import { AddressRepository, UserRepository } from '../../../repositories';
-import { UUIDMock } from '../../__mocks__';
+import { JWTMock, UUIDMock } from '../../__mocks__';
 import { IUserPayloadResponse } from '../interfaces/populateDatabase';
 
 export const insertOneUserWithAddress = async (user: IUserPayloadResponse) => {

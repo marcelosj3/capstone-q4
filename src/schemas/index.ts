@@ -1,17 +1,14 @@
-export {
-  createAddressSchema,
-  serializedCreatedAddressSchema,
-} from './addresses';
+export { createAddressSchema, serializedAddressSchema } from './addresses';
 
 export {
   createProductSchema,
-  customerProductSerializerSchema,
-  serializedCreatedProductSchema,
+  serializedProductSchema,
   updateProductSchema,
 } from './products';
+
 export {
   createUserSchema,
   loginUserSchema,
-  serializedCreatedUserSchema,
+  serializedUserSchema,
   updateUserSchema,
 } from './users';

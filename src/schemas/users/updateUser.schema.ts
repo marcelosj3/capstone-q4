@@ -2,10 +2,17 @@ import { hashSync } from 'bcrypt';
 import { boolean, object, string } from 'yup';
 
 import { CompanyRole } from '../../types';
-import { companyRoleMatches, cpfMatches, emailFormat } from '../../utils';
+import {
+  capitalizeText,
+  companyRoleMatches,
+  cpfMatches,
+  emailFormat,
+} from '../../utils';
 
 export const updateUserSchema = object().shape({
-  name: string().nullable().notRequired(),
+  name: string()
+    .notRequired()
+    .transform((name: string) => capitalizeText(name)),
   email: string()
     .email(emailFormat.message)
     .lowercase()
@@ -19,6 +26,7 @@ export const updateUserSchema = object().shape({
     .transform((pwd: string) => hashSync(pwd, 8))
     .nullable()
     .notRequired(),
+  oldPassword: string().notRequired(),
   isActive: boolean().notRequired(),
   isEmployee: boolean().notRequired(),
   companyRole: string()
