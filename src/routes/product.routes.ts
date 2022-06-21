@@ -1,12 +1,12 @@
 import { Router } from 'express';
 
+import { ProductController } from '../controllers';
 import {
   validateSchemaMiddleware,
   validateTokenMiddleware,
 } from '../middlewares';
 import { verifyRolePermissionMiddleware } from '../middlewares/users/verifyRolePermission.middleware';
 import { createProductSchema } from '../schemas';
-import { ProductService } from '../services';
 
 const router: Router = Router();
 
@@ -16,7 +16,7 @@ export const productRoutes = (): Router => {
     validateSchemaMiddleware(createProductSchema),
     validateTokenMiddleware,
     verifyRolePermissionMiddleware,
-    ProductService.create
+    ProductController.create
   );
   return router;
 };

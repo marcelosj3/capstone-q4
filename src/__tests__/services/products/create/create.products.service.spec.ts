@@ -25,9 +25,12 @@ describe('Create a product', () => {
     connection.destroy();
   });
   test('Should create a product successfully', async () => {
-    const { product, payload, expected } = createProduct;
+    const { product, stock, supplier, payload, expected } = createProduct;
     UUIDMock.v4.mockReturnValueOnce(product.productId);
+    UUIDMock.v4.mockReturnValueOnce(stock.stockId);
+    UUIDMock.v4.mockReturnValueOnce(supplier.supplierId);
     const result = await ProductService.create(payload);
+    console.log(result);
     expect(result.statusCode).toEqual(expected.status);
     expect(result.message).toEqual(expected.message);
   });

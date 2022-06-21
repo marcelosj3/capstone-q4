@@ -1,4 +1,5 @@
 import { User } from '../../src/entities';
+import { IProductCreation } from '../../src/interfaces/products';
 import { IUserAddressCreation } from '../../src/interfaces/users';
 
 declare global {
@@ -6,7 +7,7 @@ declare global {
     interface Request {
       decoded: Pick<User, 'userId'> & JwtPayload;
       user: User;
-      validated: IUserAddressCreation;
+      validated: IUserAddressCreation & IProductCreation;
     }
   }
 }

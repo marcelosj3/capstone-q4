@@ -1,7 +1,6 @@
-import { object, string } from 'yup';
+import { boolean, object, string } from 'yup';
 
 import { productStockSchema } from './productStock.schema';
-import { productSupplierSchema } from './productSupplier.schema';
 
 export const serializedCreatedProductSchema = object().shape({
   productId: string().uuid().required(),
@@ -10,6 +9,6 @@ export const serializedCreatedProductSchema = object().shape({
   category: string().required(),
   description: string().nullable().notRequired(),
   expiryDate: string().nullable().notRequired(),
+  onSale: boolean().required(),
   stock: productStockSchema.required(),
-  supplier: productSupplierSchema.required(),
 });

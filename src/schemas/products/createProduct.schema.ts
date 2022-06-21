@@ -13,6 +13,7 @@ export const createProductSchema = object().shape({
     .notRequired(),
   quantity: number().integer().required(),
   unityValue: number().required(),
+  increaseValuePercentage: number().default(30).optional(),
   supplier: object()
     .shape({
       name: string().required(),
