@@ -3,7 +3,7 @@ import { Request } from 'express';
 import { AppDataSource } from '../data-source';
 import { Cart, CartProduct, Product } from '../entities';
 import { AppError } from '../errors';
-import { IInsertToCart } from '../interfaces';
+import { IInsertToCart } from '../interfaces/cart';
 import {
   CartProductsRepository,
   CartRepository,

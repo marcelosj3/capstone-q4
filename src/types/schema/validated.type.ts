@@ -1,5 +1,10 @@
-import { IInsertToCart } from '../../interfaces';
+import { IInsertToCart } from '../../interfaces/cart';
 import { IProductCreation } from '../../interfaces/products';
-import { IUserCreateAndUpdate } from '../../interfaces/users';
+import { IUserCreate, IUserLogin, IUserUpdate } from '../../interfaces/users';
 
-export type Validated = IUserCreateAndUpdate | IInsertToCart | IProductCreation;
+export type Validated =
+  | IProductCreation
+  | IUserCreate
+  | IUserLogin
+  | IUserUpdate
+  | IInsertToCart;

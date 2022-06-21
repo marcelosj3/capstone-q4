@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from 'express';
 
 import { User } from '../../entities';
 import { AppError } from '../../errors';
-import { IUserCreateAndUpdate } from '../../interfaces/users';
+import { IUserCreate, IUserUpdate } from '../../interfaces/users';
 import { UserRepository } from '../../repositories';
 
 export const verifyUserExistsMiddleware = async (
@@ -10,7 +10,7 @@ export const verifyUserExistsMiddleware = async (
   _: Response,
   next: NextFunction
 ): Promise<void> => {
-  const validated = req.validated as IUserCreateAndUpdate;
+  const validated = req.validated as IUserCreate | IUserUpdate;
 
   const userEmail = validated.email;
   const userCpf = validated.cpf;

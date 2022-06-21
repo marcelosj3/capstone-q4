@@ -3,20 +3,19 @@ import { Request } from 'express';
 import { AppDataSource } from '../data-source';
 import { Product, Stock, Supplier } from '../entities';
 import { IProductCreation } from '../interfaces/products';
-import supplierRepository from '../repositories/supplier.repository';
+import { SupplierRepository } from '../repositories';
 import { serializedProductSchema } from '../schemas';
 
 class ProductService {
   create = async ({ validated }: Request) => {
     let product: Product;
-    validated = validated as IProductCreation;
     const {
       quantity,
       unityValue,
       increaseValuePercentage,
       supplier,
       ...productCreate
-    } = validated;
+    } = validated as IProductCreation;
     product = await AppDataSource.transaction(async (EntityManager) => {
       const product = EntityManager.create(Product, {
         ...(productCreate as unknown as Product),
@@ -28,7 +27,7 @@ class ProductService {
         unityValueToSell,
         unityValueSupplier: unityValue,
       });
-      const supplierExists = await supplierRepository.findOne(supplier);
+      const supplierExists = await SupplierRepository.findOne(supplier);
       if (!supplierExists) {
         const supplierCreate = EntityManager.create(Supplier, { ...supplier });
         stock.supplier = supplierCreate;

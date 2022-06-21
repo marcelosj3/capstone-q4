@@ -5,23 +5,23 @@ import { sign } from 'jsonwebtoken';
 import { AppDataSource } from '../data-source';
 import { Address, User } from '../entities';
 import { AppError } from '../errors';
-import { IUserCreateAndUpdate } from '../interfaces/users';
+import { IUserCreate, IUserLogin, IUserUpdate } from '../interfaces/users';
 import { UserRepository } from '../repositories';
 import { serializedUserSchema } from '../schemas';
 
 class UserService {
   create = async ({ validated }: Request) => {
-    const validatedInfo = validated as IUserCreateAndUpdate;
+    const { address } = validated as IUserCreate;
 
-    const hasAddress: Address | undefined = validatedInfo.address || undefined;
+    const hasAddress: Address | undefined = address || undefined;
     let user: User;
 
     if (hasAddress) {
-      delete validatedInfo.address;
+      delete (validated as IUserCreate).address;
 
       user = await AppDataSource.transaction(async (entityManager) => {
         const user = entityManager.create(User, {
-          ...(validatedInfo as unknown as User),
+          ...(validated as unknown as User),
         });
 
         const address = entityManager.create(Address, { ...hasAddress });
@@ -38,7 +38,7 @@ class UserService {
       });
     } else {
       user = await UserRepository.save({
-        ...(validatedInfo as unknown as User),
+        ...(validated as unknown as User),
       });
     }
 
@@ -50,17 +50,17 @@ class UserService {
   };
 
   login = async ({ validated }: Request) => {
-    const validatedInfo = validated as IUserCreateAndUpdate;
+    validated = validated as IUserLogin;
 
     const user = await UserRepository.findOneWithAddress({
-      email: validatedInfo.email,
+      email: validated.email,
     });
 
     if (!user) {
       throw new AppError({ error: 'invalid credentials' }, 401);
     }
 
-    if (!(await user.comparePassword(validatedInfo.password))) {
+    if (!(await user.comparePassword(validated.password))) {
       throw new AppError({ error: 'invalid credentials' }, 401);
     }
 
@@ -90,7 +90,7 @@ class UserService {
   };
 
   patch = async ({ decoded, validated }: Request) => {
-    const validatedInfo = validated as IUserCreateAndUpdate;
+    const { password, oldPassword } = validated as IUserUpdate;
 
     const user = await UserRepository.findOne({
       userId: decoded.id,
@@ -106,7 +106,7 @@ class UserService {
       return { statusCode: 200, message: serializedUser };
     }
 
-    if (!!validatedInfo.password && !validatedInfo.oldPassword)
+    if (!!password && !oldPassword)
       throw new AppError(
         {
           error: 'Missing old password key',
@@ -116,16 +116,16 @@ class UserService {
         401
       );
 
-    if (!!validatedInfo.oldPassword) {
-      if (!(await compare(user.password, validatedInfo.oldPassword))) {
+    if (!!oldPassword) {
+      if (!(await compare(user.password, oldPassword))) {
         throw new AppError({ error: 'Invalid old password' }, 401);
       }
 
-      delete validatedInfo.oldPassword;
+      delete (validated as IUserUpdate).oldPassword;
     }
 
     await UserRepository.update(user.userId as string, {
-      ...(validatedInfo as unknown as User),
+      ...(validated as unknown as User),
     });
 
     const updatedUser = await UserRepository.findOne({
