@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from 'express';
 
 import { User } from '../../entities';
 import { AppError } from '../../errors';
-import { IUserCreate, IUserUpdate } from '../../interfaces/users';
+import { IUserCreate, IUserUpdate } from '../../interfaces';
 import { UserRepository } from '../../repositories';
 
 export const verifyUserExistsMiddleware = async (

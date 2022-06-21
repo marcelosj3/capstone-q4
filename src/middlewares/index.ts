@@ -1,6 +1,6 @@
 export { validateTokenMiddleware } from './auth';
 
-export { errorMiddleware } from './errors/error.middleware';
+export { errorMiddleware } from './errors';
 
 export { validateSchemaMiddleware } from './schema';
 

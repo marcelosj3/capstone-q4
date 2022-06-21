@@ -1,8 +1,12 @@
-import { IInsertToCart } from '../../interfaces/cart';
-import { IProductCreation } from '../../interfaces/products';
-import { IUserCreate, IUserLogin, IUserUpdate } from '../../interfaces/users';
+import {
+  IInsertToCart,
+  IProductCreation,
+  IUserCreate,
+  IUserLogin,
+  IUserUpdate,
+} from '../../interfaces';
 
-export type Validated =
+export type TValidated =
   | IProductCreation
   | IUserCreate
   | IUserLogin

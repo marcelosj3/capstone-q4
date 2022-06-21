@@ -2,7 +2,7 @@ import { Request } from 'express';
 
 import { AppDataSource } from '../data-source';
 import { Product, Stock, Supplier } from '../entities';
-import { IProductCreation } from '../interfaces/products';
+import { IProductCreation } from '../interfaces';
 import { SupplierRepository } from '../repositories';
 import { serializedProductSchema } from '../schemas';
 

@@ -1,4 +1,4 @@
-import { BaseError } from '../../interfaces/errors/appBaseError.interface';
+import { BaseError } from '../../interfaces';
 
 export class AppError extends BaseError {
   statusCode: number;

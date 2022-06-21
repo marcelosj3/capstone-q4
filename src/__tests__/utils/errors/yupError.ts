@@ -1,4 +1,4 @@
-import { BaseError } from '../../../interfaces/errors/appBaseError.interface';
+import { BaseError } from '../../../interfaces';
 import { YupErrorMessage } from '../types';
 
 export class YupError extends BaseError {

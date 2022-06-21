@@ -3,17 +3,18 @@ import { Request } from 'express';
 import { AppDataSource } from '../data-source';
 import { Cart, CartProduct } from '../entities';
 import { AppError } from '../errors';
-import { IInsertToCart } from '../interfaces/cart';
+import { IInsertToCart } from '../interfaces';
 import {
   CartProductsRepository,
   CartRepository,
   ProductRepository,
   UserRepository,
 } from '../repositories';
-// TODO check why those imports doesn't work when exporting from utils
-import { cartToSerialize } from '../utils/cart/cartToSerialize.util';
-import { reduceCartTotalPrice } from '../utils/cart/reduceCartTotalPrice.util';
-import { shippingFeeCalculator } from '../utils/cart/shippingFeeCalculator.util';
+import {
+  cartToSerialize,
+  reduceCartTotalPrice,
+  shippingFeeCalculator,
+} from '../utils/';
 
 class CartService {
   insertProduct = async ({ validated, decoded }: Request) => {

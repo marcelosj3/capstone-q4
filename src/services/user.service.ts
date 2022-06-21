@@ -5,7 +5,7 @@ import { sign } from 'jsonwebtoken';
 import { AppDataSource } from '../data-source';
 import { Address, User } from '../entities';
 import { AppError } from '../errors';
-import { IUserCreate, IUserLogin, IUserUpdate } from '../interfaces/users';
+import { IUserCreate, IUserLogin, IUserUpdate } from '../interfaces';
 import { UserRepository } from '../repositories';
 import { serializedUserSchema } from '../schemas';
 
