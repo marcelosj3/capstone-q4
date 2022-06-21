@@ -1,5 +1,7 @@
 export { createAddressSchema, serializedAddressSchema } from './addresses';
 
+export { insertToCartSchema, serializedCartSchema } from './cart';
+
 export {
   createProductSchema,
   serializedProductSchema,

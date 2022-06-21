@@ -1,3 +1,4 @@
+import CartController from './cart.controller';
 import UserController from './user.controller';
 
-export { UserController };
+export { CartController, UserController };
