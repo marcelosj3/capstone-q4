@@ -4,8 +4,8 @@ import { ProductController } from '../controllers';
 import {
   validateSchemaMiddleware,
   validateTokenMiddleware,
+  verifyRolePermissionMiddleware,
 } from '../middlewares';
-import { verifyRolePermissionMiddleware } from '../middlewares/users/verifyRolePermission.middleware';
 import { createProductSchema } from '../schemas';
 
 const router: Router = Router();

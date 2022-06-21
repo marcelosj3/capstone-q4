@@ -1,3 +1,3 @@
 export { TProduct } from './product';
-export { Validated } from './schema';
+export { TValidated } from './schema';
 export { CompanyRole } from './users';

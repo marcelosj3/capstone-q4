@@ -1,4 +1,14 @@
-import { IProductCreation } from '../../interfaces/products';
-import { IUserCreateAndUpdate } from '../../interfaces/users';
+import {
+  IInsertToCart,
+  IProductCreation,
+  IUserCreate,
+  IUserLogin,
+  IUserUpdate,
+} from '../../interfaces';
 
-export type Validated = IUserCreateAndUpdate | IProductCreation;
+export type TValidated =
+  | IProductCreation
+  | IUserCreate
+  | IUserLogin
+  | IUserUpdate
+  | IInsertToCart;

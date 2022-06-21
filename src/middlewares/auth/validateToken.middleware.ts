@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 
-import { validateToken } from '../../utils/auth';
+import { validateToken } from '../../utils';
 
 export const validateTokenMiddleware = async (
   req: Request,

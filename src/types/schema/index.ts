@@ -1,1 +1,1 @@
-export { Validated } from './validated.type';
+export { TValidated } from './validated.type';
