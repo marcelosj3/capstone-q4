@@ -1,4 +1,7 @@
-import { boolean, number, object, string } from 'yup';
+import { object, string } from 'yup';
+
+import { productStockSchema } from './productStock.schema';
+import { productSupplierSchema } from './productSupplier.schema';
 
 export const serializedCreatedProductSchema = object().shape({
   productId: string().uuid().required(),
@@ -7,21 +10,6 @@ export const serializedCreatedProductSchema = object().shape({
   category: string().required(),
   description: string().nullable().notRequired(),
   expiryDate: string().nullable().notRequired(),
-  //TODO: componentizar o stock e o supplier para utilizar mais facilmente em outros lugares
-  stock: object()
-    .shape({
-      stockId: string().uuid().required(),
-      increaseValuePercentage: number().required(),
-      isAvailable: boolean().required(),
-      unityValueToSell: number().required(),
-      supplier: object()
-        .shape({
-          supplierId: string().uuid().required(),
-          name: string().required(),
-          cnpj: string().required(),
-          unityValue: number().required(),
-        })
-        .required(),
-    })
-    .required(),
+  stock: productStockSchema.required(),
+  supplier: productSupplierSchema.required(),
 });
