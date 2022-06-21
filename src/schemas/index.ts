@@ -5,6 +5,7 @@ export {
 
 export {
   createProductSchema,
+  customerProductSerializerSchema,
   serializedCreatedProductSchema,
   updateProductSchema,
 } from './products';
