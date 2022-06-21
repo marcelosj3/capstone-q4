@@ -1,6 +1,7 @@
 import { number, object, string } from 'yup';
 
-import { cnpjMatches, expiryDateMatches } from '../../utils';
+import { expiryDateMatches } from '../../utils';
+import { createSupplierSchema } from '../suppliers';
 
 export const createProductSchema = object().shape({
   name: string().required(),
@@ -12,12 +13,5 @@ export const createProductSchema = object().shape({
     .nullable()
     .notRequired(),
   quantity: number().integer().required(),
-  unityValue: number().required(),
-  increaseValuePercentage: number().default(30).optional(),
-  supplier: object()
-    .shape({
-      name: string().required(),
-      cnpj: string().matches(cnpjMatches.regex, cnpjMatches.message).required(),
-    })
-    .required(),
+  supplier: createSupplierSchema.required(),
 });

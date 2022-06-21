@@ -1,5 +1,5 @@
 export { createProductSchema } from './createProduct.schema';
-export { productStockSchema } from './productStock.schema';
+export { serializedCustomerProductSchema } from './serializedCustomerProduct.schema';
+export { serializedEmployeeProductSchema } from './serializedEmployeeProduct.schema';
 export { serializedProductSchema } from './serializedProduct.schema';
-export { productSupplierSchema } from './productSupplier.schema';
 export { updateProductSchema } from './updateProduct.schema';
