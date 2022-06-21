@@ -1,1 +1,1 @@
-export { IUserAddressCreation } from './userAddressCreation.interface';
+export { IUserCreateAndUpdate } from './IUserCreateAndUpdate.interface';

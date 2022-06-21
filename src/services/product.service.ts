@@ -2,12 +2,14 @@ import { Request } from 'express';
 
 import { AppDataSource } from '../data-source';
 import { Product, Stock, Supplier } from '../entities';
+import { IProductCreation } from '../interfaces/products';
 import supplierRepository from '../repositories/supplier.repository';
-import { serializedCreatedProductSchema } from '../schemas';
+import { serializedProductSchema } from '../schemas';
 
 class ProductService {
   create = async ({ validated }: Request) => {
     let product: Product;
+    validated = validated as IProductCreation;
     const {
       quantity,
       unityValue,
@@ -39,13 +41,12 @@ class ProductService {
       await EntityManager.save(Product, product);
       return product;
     });
-    const seralizedProduct = await serializedCreatedProductSchema.validate(
-      product,
-      { stripUnknown: true }
-    );
+    const serializedProduct = await serializedProductSchema.validate(product, {
+      stripUnknown: true,
+    });
     return {
       statusCode: 201,
-      message: seralizedProduct,
+      message: serializedProduct,
     };
   };
 }

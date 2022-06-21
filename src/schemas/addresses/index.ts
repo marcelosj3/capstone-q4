@@ -1,2 +1,2 @@
 export { createAddressSchema } from './createAddress.schema';
-export { serializedCreatedAddressSchema } from './serializedAddress.schema';
+export { serializedAddressSchema } from './serializedAddress.schema';

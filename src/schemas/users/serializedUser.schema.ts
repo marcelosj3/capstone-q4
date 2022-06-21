@@ -1,14 +1,13 @@
 import { array, boolean, object, string } from 'yup';
 
 import { CompanyRole } from '../../types';
-import { serializedCreatedAddressSchema } from '../addresses';
+import { serializedAddressSchema } from '../addresses';
 
-export const serializedCreatedUserSchema = object().shape({
-  userId: string().uuid().required(),
-  name: string().required(),
-  email: string().email().required(),
-  isActive: boolean().required(),
-  isEmployee: boolean().required(),
-  companyRole: string().oneOf(Object.values(CompanyRole)).required(),
-  address: array().of(serializedCreatedAddressSchema).default([]).optional(),
+export const serializedUserSchema = object().shape({
+  userId: string().uuid(),
+  name: string(),
+  email: string().email(),
+  isActive: boolean(),
+  companyRole: string().oneOf(Object.values(CompanyRole)),
+  address: array().of(serializedAddressSchema).optional(),
 });

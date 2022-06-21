@@ -1,13 +1,13 @@
 import { boolean, number, object, string } from 'yup';
 
-export const serializedCreatedAddressSchema = object().shape({
-  addressId: string().uuid().required(),
-  state: string().required(),
-  city: string().required(),
-  district: string().required(),
-  street: string().required(),
-  houseNumber: number().required(),
-  zipCode: string().required(),
+export const serializedAddressSchema = object().shape({
+  addressId: string().uuid(),
+  state: string(),
+  city: string(),
+  district: string(),
+  street: string(),
+  houseNumber: number(),
+  zipCode: string(),
   additionalAddressData: string().notRequired(),
-  isMain: boolean().required(),
+  isMain: boolean(),
 });
