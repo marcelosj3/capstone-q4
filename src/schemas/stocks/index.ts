@@ -1,2 +1,2 @@
-export { employeeProductStockSchema } from './employeeProductStock.schema';
-export { productStockSchema } from './productStock.schema';
+export { createStockSchema } from './createStock.schema';
+export { serializedStockSchema } from './serializedStock.schema';

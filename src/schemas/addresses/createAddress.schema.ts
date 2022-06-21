@@ -7,7 +7,7 @@ export const createAddressSchema = object().shape({
   city: string().required(),
   district: string().required(),
   street: string().required(),
-  houseNumber: number().positive().required(),
+  houseNumber: number().required(),
   zipCode: string()
     .matches(zipCodeMatches.regex, zipCodeMatches.message)
     .required(),

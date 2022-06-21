@@ -1,7 +1,7 @@
 import { number, object, string } from 'yup';
 
 import { expiryDateMatches } from '../../utils';
-import { productSupplierSchema } from '../suppliers';
+import { createSupplierSchema } from '../suppliers';
 
 export const createProductSchema = object().shape({
   name: string().required(),
@@ -13,5 +13,5 @@ export const createProductSchema = object().shape({
     .nullable()
     .notRequired(),
   quantity: number().integer().required(),
-  supplier: productSupplierSchema.required(),
+  supplier: createSupplierSchema.required(),
 });

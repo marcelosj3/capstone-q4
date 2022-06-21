@@ -1,7 +1,7 @@
 import { number, object, string } from 'yup';
 
-import { cnpjMatches, expiryDateMatches } from '../../utils';
-import { productSupplierSchema } from '../suppliers';
+import { expiryDateMatches } from '../../utils';
+import { updateSupplierSchema } from '../suppliers';
 
 export const updateProductSchema = object().shape({
   name: string().nullable().notRequired(),
@@ -12,5 +12,5 @@ export const updateProductSchema = object().shape({
     .matches(expiryDateMatches.regex, expiryDateMatches.message)
     .notRequired(),
   quantity: number().integer().notRequired(),
-  supplier: productSupplierSchema.notRequired(),
+  supplier: updateSupplierSchema.notRequired(),
 });
