@@ -1,12 +1,13 @@
 import { Request } from 'express';
 
 import { AppDataSource } from '../data-source';
-import { Cart, CartProduct, Product } from '../entities';
+import { Cart, CartProduct } from '../entities';
 import { AppError } from '../errors';
 import { IInsertToCart } from '../interfaces/cart';
 import {
   CartProductsRepository,
   CartRepository,
+  ProductRepository,
   UserRepository,
 } from '../repositories';
 // TODO check why those imports doesn't work when exporting from utils
@@ -25,13 +26,10 @@ class CartService {
 
     const userCart = user.cart.find((cart) => cart.isPaid == false) as Cart;
 
-    // TODO change for the ProductRepository once we have it
-    const product = await AppDataSource.getRepository(Product).findOne({
-      where: { productId: productId },
-      relations: ['stock', 'stock.supplier'],
-    });
+    const product = await ProductRepository.findOneWithStock({ productId });
 
     if (!product) throw new AppError({ error: 'product not found' }, 404);
+
     const productQuantity = product.stock.quantity;
 
     if (quantity > productQuantity)
@@ -46,6 +44,7 @@ class CartService {
     let cartProduct: CartProduct;
 
     if (userCart) {
+      // Cart already exists
       cart = userCart;
 
       const productIndex = cart.cartProducts.findIndex(
@@ -53,6 +52,8 @@ class CartService {
       );
 
       if (productIndex !== -1) {
+        // Product already exists on cart
+
         const cartProduct = cart.cartProducts[productIndex];
 
         if (quantity === 0) {
@@ -73,6 +74,8 @@ class CartService {
           );
         }
       } else {
+        // Product does not exists on cart
+
         const cartProductInfo = { product, quantity };
 
         cartProduct = CartProductsRepository.create(cartProductInfo);
@@ -82,22 +85,23 @@ class CartService {
         cartProduct = await CartProductsRepository.save(cartProduct);
       }
     } else {
+      // An isPaid = false cart does not exists
+
       cart = await AppDataSource.transaction(async (entityManager) => {
-        const cartProductInfo = { product, quantity };
+        const cartProductInfo = { product, quantity, cart: {} as Cart };
 
-        cartProduct = CartProductsRepository.create(cartProductInfo);
+        cartProduct = entityManager.create(CartProduct, cartProductInfo);
 
-        const cartInfo = CartRepository.create({});
+        const cartInfo = entityManager.create(Cart, {});
         cartInfo.totalPrice = product.stock.unityValueToSell * quantity;
         cartInfo.cartProducts = [cartProduct];
-        cartInfo.shippingFee = 10;
         cartInfo.user = user;
 
-        cart = await CartRepository.save(cartInfo);
+        cart = await entityManager.save(Cart, cartInfo);
 
         cartProduct.cart = cart;
 
-        cartProduct = await CartProductsRepository.save(cartProduct);
+        cartProduct = await entityManager.save(CartProduct, cartProduct);
 
         return cart;
       });

@@ -1,5 +1,5 @@
 import { Cart } from '../../entities';
-import { serializedCartSchema } from '../../schemas';
+import { serializedCartSchema } from '../../schemas/cart';
 
 export const cartToSerialize = async (cart: Cart) =>
   await serializedCartSchema.validate(
