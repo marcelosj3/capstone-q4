@@ -1,6 +1,7 @@
 import { DataSource } from 'typeorm';
 
 import { AppDataSource } from '../../../../data-source';
+import { ProductService } from '../../../../services';
 import { UUIDMock } from '../../../__mocks__';
 import { createProduct } from './__scenarios__';
 
@@ -26,5 +27,8 @@ describe('Create a product', () => {
   test('Should create a product successfully', async () => {
     const { product, payload, expected } = createProduct;
     UUIDMock.v4.mockReturnValueOnce(product.productId);
+    const result = await ProductService.create(payload);
+    expect(result.statusCode).toEqual(expected.status);
+    expect(result.message).toEqual(expected.message);
   });
 });
