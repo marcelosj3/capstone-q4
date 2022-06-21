@@ -2,7 +2,7 @@ import {
   userClientWithAddress,
   userEmployeeWithAddress,
   userManagerWithAddress,
-} from '../../utils/users/usersWithAddress';
+} from '../../../utils/users/usersWithAddress';
 import {
   userAdminWithoutAddress,
   userClientWithoutAddress,
@@ -10,7 +10,7 @@ import {
   userEmployeeWithoutAddress,
   userManagerWithoutAddress,
   userManagerWithoutAddress2,
-} from '../../utils/users/usersWithoutAddress';
+} from '../../../utils/users/usersWithoutAddress';
 
 export const createUserWithMissingKeys = {
   payload: { ...userClientWithoutAddress.payload, email: '' },

@@ -1,15 +1,15 @@
 import request from 'supertest';
 import { DataSource } from 'typeorm';
 
-import { app } from '../../../app';
-import { AppDataSource } from '../../../data-source';
-import { JWTMock, UUIDMock } from '../../__mocks__';
-import { insertOneUser } from '../../utils/populateDatabase';
+import { app } from '../../../../app';
+import { AppDataSource } from '../../../../data-source';
+import { JWTMock, UUIDMock } from '../../../__mocks__';
+import { insertOneUser } from '../../../utils/populateDatabase';
 import {
   userEmployeeWithAddress,
   userManagerWithAddress,
-} from '../../utils/users/usersWithAddress';
-import { userAdminWithoutAddress } from '../../utils/users/usersWithoutAddress';
+} from '../../../utils/users/usersWithAddress';
+import { userAdminWithoutAddress } from '../../../utils/users/usersWithoutAddress';
 import {
   createClientUserWithEmployeeToken,
   createEmployeeUserWithEmployeeToken,
