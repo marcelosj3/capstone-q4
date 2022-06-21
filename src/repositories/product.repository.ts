@@ -20,11 +20,6 @@ class ProductRepository {
       relations: ['stock', 'stock.supplier'],
     });
   };
-
-  // const product = await AppDataSource.getRepository(Product).findOne({
-  //   where: { productId: productId },
-  //   relations: ['stock', 'stock.supplier'],
-  // })
 }
 
 export default new ProductRepository();
