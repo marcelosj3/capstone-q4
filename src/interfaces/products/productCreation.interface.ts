@@ -1,5 +1,4 @@
 export interface IProductCreation {
-  productId: string;
   name: string;
   brand: string;
   category: string;

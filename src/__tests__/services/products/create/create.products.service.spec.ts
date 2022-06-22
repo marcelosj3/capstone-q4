@@ -2,7 +2,7 @@ import { DataSource } from 'typeorm';
 
 import { AppDataSource } from '../../../../data-source';
 import { ProductService } from '../../../../services';
-import { UUIDMock } from '../../../__mocks__';
+import { UUIDMock, YupMock } from '../../../__mocks__';
 import { createProduct } from './__scenarios__';
 
 jest.mock('uuid', () => ({
@@ -21,16 +21,24 @@ describe('Create a product', () => {
         console.error('Error during test data source initialization', err)
       );
   });
+
   afterAll(async () => {
     connection.destroy();
   });
+
   test('Should create a product successfully', async () => {
-    const { product, stock, supplier, payload, expected } = createProduct;
-    UUIDMock.v4.mockReturnValueOnce(product.productId);
-    UUIDMock.v4.mockReturnValueOnce(stock.stockId);
+    const { schemaShape, product, stock, supplier, payload, expected } =
+      createProduct;
+
     UUIDMock.v4.mockReturnValueOnce(supplier.supplierId);
+    UUIDMock.v4.mockReturnValueOnce(stock.stockId);
+    UUIDMock.v4.mockReturnValueOnce(product.productId);
+
+    YupMock.validate(schemaShape).mockResolvedValueOnce(product);
+
     const result = await ProductService.create(payload);
-    console.log(result);
+
+    expect(YupMock.validate(schemaShape)).toBeCalled();
     expect(result.statusCode).toEqual(expected.status);
     expect(result.message).toEqual(expected.message);
   });

@@ -44,7 +44,7 @@ class UserRepository {
     });
   };
 
-  findOneWithOrder = async (payload: object): Promise<User | null> => {
+  findOneWithOrders = async (payload: object): Promise<User | null> => {
     return await this.repo.findOne({
       where: { ...payload },
       relations: [
@@ -52,6 +52,8 @@ class UserRepository {
         'orders.cart',
         'orders.cart.cartProducts',
         'orders.cart.cartProducts.product',
+        'orders.cart.cartProducts.product.stock',
+        'orders.cart.cartProducts.product.stock.supplier',
       ],
     });
   };
