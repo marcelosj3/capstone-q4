@@ -25,6 +25,13 @@ class UserRepository {
     });
   };
 
+  findOneWithAddress = async (payload: object): Promise<User | null> => {
+    return await this.repo.findOne({
+      where: { ...payload },
+      relations: ['address'],
+    });
+  };
+
   findOneWithCart = async (payload: object): Promise<User | null> => {
     return await this.repo.findOne({
       where: { ...payload },
@@ -37,10 +44,15 @@ class UserRepository {
     });
   };
 
-  findOneWithAddress = async (payload: object): Promise<User | null> => {
+  findOneWithOrder = async (payload: object): Promise<User | null> => {
     return await this.repo.findOne({
       where: { ...payload },
-      relations: ['address'],
+      relations: [
+        'orders',
+        'orders.cart',
+        'orders.cart.cartProducts',
+        'orders.cart.cartProducts.product',
+      ],
     });
   };
 

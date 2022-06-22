@@ -14,7 +14,7 @@ export const cartToSerialize = async (cart: Cart) =>
         category: cartProduct.product.category,
         description: cartProduct.product.description,
         quantity: cartProduct.quantity,
-        unityValueToSell: cartProduct.product.stock.unityValueToSell,
+        unityValue: cartProduct.product.stock.unityValueToSell,
       })),
     },
     {

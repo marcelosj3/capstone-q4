@@ -1,7 +1,7 @@
 import { Request } from 'express';
 
 import { AppDataSource } from '../data-source';
-import { Cart, CartProduct, Order, Product, Stock } from '../entities';
+import { Cart, CartProduct, Order, Stock } from '../entities';
 import { AppError } from '../errors';
 import { IInsertToCart } from '../interfaces';
 import {
@@ -12,6 +12,7 @@ import {
 } from '../repositories';
 import {
   cartToSerialize,
+  orderToSerialize,
   reduceCartTotalPrice,
   shippingFeeCalculator,
 } from '../utils';
@@ -25,7 +26,8 @@ class CartService {
 
     if (!user) throw new AppError({ error: 'user not found' }, 404);
 
-    const userCart = user.cart.find((cart) => cart.isPaid == false) as Cart;
+    const userCart =
+      (user.cart.find((cart) => cart.isPaid == false) as Cart) || undefined;
 
     const product = await ProductRepository.findOneWithStock({ productId });
 
@@ -74,8 +76,8 @@ class CartService {
             cartProduct
           );
         }
-      } else {
-        // Product does not exists on cart
+      } else if (quantity !== 0) {
+        // Product does not exists on cart and quantity !== 0
 
         const cartProductInfo = { product, quantity };
 
@@ -100,13 +102,9 @@ class CartService {
         cartInfo.shippingFee = 0;
 
         cart = await entityManager.save(Cart, cartInfo);
-        console.log('-'.repeat(50));
-        console.log(new Date().toLocaleTimeString());
-        console.log();
-        console.log(cartProduct);
-        console.log();
-        console.log('-'.repeat(50));
+
         cartProduct.cart = cart;
+        cartProduct.product = product;
 
         cartProduct = await entityManager.save(CartProduct, cartProduct);
 
@@ -181,7 +179,9 @@ class CartService {
       }
     );
 
-    return { statusCode: 200, message: order };
+    const serializedOrder = await orderToSerialize(order);
+
+    return { statusCode: 200, message: serializedOrder };
   };
 }
 

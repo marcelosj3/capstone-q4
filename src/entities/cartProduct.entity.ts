@@ -23,7 +23,6 @@ export class CartProduct {
   @ManyToOne(() => Cart, (cart) => cart.cartProducts)
   cart: Cart;
 
-  @ManyToMany(() => Product, (product) => product.cartProduct)
-  @JoinTable()
+  @ManyToOne(() => Product, (product) => product.cartProduct)
   product: Product;
 }
