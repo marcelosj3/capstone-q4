@@ -3,11 +3,12 @@ import { Request } from 'express';
 import { sign } from 'jsonwebtoken';
 
 import { AppDataSource } from '../data-source';
-import { Address, User } from '../entities';
+import { Address, Order, User } from '../entities';
 import { AppError } from '../errors';
 import { IUserCreate, IUserLogin, IUserUpdate } from '../interfaces';
 import { UserRepository } from '../repositories';
 import { serializedUserSchema } from '../schemas';
+import { orderToSerialize } from '../utils';
 
 class UserService {
   create = async ({ validated }: Request) => {
@@ -144,6 +145,39 @@ class UserService {
     await UserRepository.delete(String(user.userId));
 
     return { statusCode: 204 };
+  };
+
+  orders = async ({ decoded, query }: Request) => {
+    const { id: userId } = decoded;
+    const { withProducts } = query;
+    const getWithProducts = !(
+      withProducts !== undefined && withProducts !== 'false'
+    );
+
+    const user = await UserRepository.findOneWithOrders({ userId });
+
+    if (!user) throw new AppError({ error: 'user not found' }, 404);
+
+    const { orders } = user;
+
+    if (orders.length === 0)
+      return {
+        statusCode: 200,
+        message: { message: 'there are no orders to display' },
+      };
+
+    const serializedOrders = [];
+
+    for (let i = 0; i < user.orders.length; i++) {
+      const order = user.orders[i];
+      const serializedOrder = await orderToSerialize(
+        order as Order,
+        getWithProducts
+      );
+      serializedOrders.push(serializedOrder);
+    }
+
+    return { statusCode: 200, message: serializedOrders };
   };
 }
 
