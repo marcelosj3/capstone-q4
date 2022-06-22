@@ -4,9 +4,10 @@ import { ProductController } from '../controllers';
 import {
   validateSchemaMiddleware,
   validateTokenMiddleware,
-  verifyRolePermissionMiddleware,
+  verifyRoleMiddleware,
 } from '../middlewares';
 import { createProductSchema } from '../schemas';
+import { CompanyRole } from '../types';
 
 const router: Router = Router();
 
@@ -15,7 +16,7 @@ export const productRoutes = (): Router => {
     '',
     validateSchemaMiddleware(createProductSchema),
     validateTokenMiddleware,
-    verifyRolePermissionMiddleware,
+    verifyRoleMiddleware(CompanyRole.MANAGER),
     ProductController.create
   );
   router.get('', validateTokenMiddleware, ProductController.get);

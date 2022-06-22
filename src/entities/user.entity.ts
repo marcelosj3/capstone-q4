@@ -43,7 +43,7 @@ export class User {
   @JoinTable()
   address: Address[];
 
-  @OneToMany(() => Order, (order) => order.user, { lazy: true })
+  @OneToMany(() => Order, (order) => order.user, { eager: true })
   orders: Order[];
 
   @OneToMany(() => Cart, (cart) => cart.user)

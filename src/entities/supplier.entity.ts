@@ -18,8 +18,7 @@ export class Supplier {
   @Column()
   name: string;
 
-  @Column()
-  // TODO insert unique value
+  @Column({ unique: true })
   cnpj: string;
 
   @OneToMany(() => Stock, (stock) => stock.supplier)

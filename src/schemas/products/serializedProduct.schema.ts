@@ -9,9 +9,9 @@ export const serializedProductSchema = object().shape({
   category: string(),
   description: string(),
   expiryDate: string(),
-  onSale: boolean(),
+  onSale: boolean().optional(),
   quantity: number().integer(),
-  unityValueToSell: number(),
+  unityValue: number(),
   stock: lazy((value) => {
     if (value !== undefined) return serializedStockSchema;
     return mixed().notRequired();
