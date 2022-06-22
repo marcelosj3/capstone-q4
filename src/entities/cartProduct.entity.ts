@@ -2,6 +2,8 @@ import {
   Column,
   Entity,
   JoinColumn,
+  JoinTable,
+  ManyToMany,
   ManyToOne,
   OneToOne,
   PrimaryGeneratedColumn,
@@ -21,7 +23,6 @@ export class CartProduct {
   @ManyToOne(() => Cart, (cart) => cart.cartProducts)
   cart: Cart;
 
-  @OneToOne(() => Product, (product) => product.cartProduct)
-  @JoinColumn()
+  @ManyToOne(() => Product, (product) => product.cartProduct)
   product: Product;
 }

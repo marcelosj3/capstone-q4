@@ -11,14 +11,20 @@ export { expiryDateMatches } from './products/';
 export { cnpjMatches } from './suppliers/';
 
 export {
+  companyRoleMatches,
+  cpfMatches,
+  emailFormat,
+  verifyRolePermission,
+} from './users/';
+
+export {
+  // This export should be before the last one
   cartToSerialize,
   reduceCartTotalPrice,
   shippingFeeCalculator,
 } from './cart/';
 
 export {
-  companyRoleMatches,
-  cpfMatches,
-  emailFormat,
-  verifyRolePermission,
-} from './users/';
+  // This export should be the last one
+  orderToSerialize,
+} from './orders';
