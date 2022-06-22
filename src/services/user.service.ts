@@ -150,7 +150,7 @@ class UserService {
   orders = async ({ decoded, query }: Request) => {
     const { id: userId } = decoded;
     const { withProducts } = query;
-    const getWithProducts = !(
+    const shouldGetWithProducts = !(
       withProducts !== undefined && withProducts !== 'false'
     );
 
@@ -172,7 +172,7 @@ class UserService {
       const order = user.orders[i];
       const serializedOrder = await orderToSerialize(
         order as Order,
-        getWithProducts
+        shouldGetWithProducts
       );
       serializedOrders.push(serializedOrder);
     }

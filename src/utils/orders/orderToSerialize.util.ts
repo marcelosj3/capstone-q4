@@ -11,8 +11,12 @@ export const orderToSerialize = async (
       cartId: order.cart.cartId,
       totalPrice: order.cart.totalPrice,
       shippingFee: order.cart.shippingFee,
+      uniqueProducts: withProducts ? order.cart.cartProducts.length : undefined,
       products: withProducts
-        ? order.cart.cartProducts.length
+        ? order.cart.cartProducts.reduce(
+            (acc, { quantity }) => acc + quantity,
+            0
+          )
         : order.cart.cartProducts.map(({ quantity, product }) => ({
             ...product,
             stock: undefined,
