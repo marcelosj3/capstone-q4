@@ -1,8 +1,9 @@
 import { Request } from 'express';
 
 import { Product, Stock, Supplier } from '../../../../entities';
+import { serializedProductSchema } from '../../../../schemas';
 
-const seralizedProduct = {
+const serializedProduct = {
   productId: '393be4d2-5ed8-4edf-8dbc-5598e813d2b8',
   name: 'leite',
   brand: 'longa vida',
@@ -25,26 +26,25 @@ const seralizedProduct = {
 };
 
 export const createProduct = {
-  product: seralizedProduct as Product,
-  stock: seralizedProduct.stock as Stock,
-  supplier: seralizedProduct.stock.supplier as Supplier,
+  schemaShape: serializedProductSchema,
+  product: serializedProduct as Product,
+  stock: serializedProduct.stock as Stock,
+  supplier: serializedProduct.stock.supplier as Supplier,
   payload: {
     validated: {
       name: 'leite',
-      brand: 'longa vida',
       category: 'laticinios',
+      brand: 'longa vida',
       description: 'leite pasteurizado caixa 1000ml',
       expiryDate: '20/08/2022',
       quantity: 40,
-      unityValue: 2.0,
-      supplier: {
-        name: 'Fornecedora de leite',
-        cnpj: '94.242.943/0001-74',
-      },
+      unityValue: 2,
+      increaseValuePercentage: 30,
+      supplier: { name: 'Fornecedora de leite', cnpj: '94.242.943/0001-74' },
     },
   } as Request,
   expected: {
     status: 201,
-    message: seralizedProduct as Product,
+    message: serializedProduct as Product,
   },
 };
