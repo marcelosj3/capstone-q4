@@ -3,7 +3,7 @@ import { Request } from 'express';
 import { AppDataSource } from '../data-source';
 import { Product, Stock, Supplier } from '../entities';
 import { IProductCreation } from '../interfaces';
-import { SupplierRepository } from '../repositories';
+import { ProductRepository, SupplierRepository } from '../repositories';
 import { serializedProductSchema } from '../schemas';
 
 class ProductService {
@@ -14,35 +14,69 @@ class ProductService {
       unityValue,
       increaseValuePercentage,
       supplier,
-      ...productCreate
+      ...productInfo
     } = validated as IProductCreation;
-    product = await AppDataSource.transaction(async (EntityManager) => {
-      const product = EntityManager.create(Product, {
-        ...(productCreate as unknown as Product),
+
+    const productFound = await ProductRepository.findOneWithStock(productInfo);
+
+    if (productFound && productFound.stock.supplier.cnpj === supplier.cnpj) {
+      product = await AppDataSource.transaction(async (entityManager) => {
+        const { stock } = productFound;
+
+        const newQuantity = stock.quantity + quantity;
+
+        await entityManager.update(Stock, stock.stockId, {
+          quantity: newQuantity,
+        });
+
+        const product = await entityManager.findOne(Product, {
+          where: { productId: productFound.productId },
+          relations: ['stock', 'stock.supplier'],
+        });
+
+        return product!;
       });
-      const unityValueToSell: number =
-        unityValue + (unityValue * increaseValuePercentage) / 100;
-      const stock = EntityManager.create(Stock, {
-        quantity,
-        unityValueToSell,
-        unityValueSupplier: unityValue,
+    } else {
+      product = await AppDataSource.transaction(async (entityManager) => {
+        const product = entityManager.create(Product, {
+          ...(productInfo as unknown as Product),
+        });
+
+        const unityValueToSell: number =
+          unityValue + (unityValue * increaseValuePercentage) / 100;
+
+        const stock = entityManager.create(Stock, {
+          quantity,
+          unityValueToSell,
+          unityValueSupplier: unityValue,
+        });
+
+        const supplierExists = await SupplierRepository.findOne(supplier);
+
+        if (!supplierExists) {
+          const supplierCreate = entityManager.create(Supplier, {
+            ...supplier,
+          });
+
+          stock.supplier = supplierCreate;
+          await entityManager.save(Supplier, supplierCreate);
+        } else {
+          stock.supplier = supplierExists;
+        }
+
+        product.stock = stock;
+
+        await entityManager.save(Stock, stock);
+        await entityManager.save(Product, product);
+
+        return product;
       });
-      const supplierExists = await SupplierRepository.findOne(supplier);
-      if (!supplierExists) {
-        const supplierCreate = EntityManager.create(Supplier, { ...supplier });
-        stock.supplier = supplierCreate;
-        await EntityManager.save(Supplier, supplierCreate);
-      } else {
-        stock.supplier = supplierExists;
-      }
-      product.stock = stock;
-      await EntityManager.save(Stock, stock);
-      await EntityManager.save(Product, product);
-      return product;
-    });
+    }
+
     const serializedProduct = await serializedProductSchema.validate(product, {
       stripUnknown: true,
     });
+
     return {
       statusCode: 201,
       message: serializedProduct,

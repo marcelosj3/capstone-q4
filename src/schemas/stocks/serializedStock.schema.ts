@@ -7,6 +7,6 @@ export const serializedStockSchema = object().shape({
   increaseValuePercentage: number().integer(),
   isAvailable: boolean(),
   quantity: number().integer(),
-  unityValueToSell: number().integer(),
+  unityValueToSell: number(),
   supplier: serializedSupplierSchema,
 });
