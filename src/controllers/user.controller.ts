@@ -27,6 +27,11 @@ class UserController {
     const { statusCode } = await UserService.delete(req);
     return res.status(statusCode).send();
   };
+
+  orders = async (req: Request, res: Response) => {
+    const { statusCode, message } = await UserService.orders(req);
+    return res.status(statusCode).json(message);
+  };
 }
 
 export default new UserController();

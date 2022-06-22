@@ -51,6 +51,8 @@ export const userRoutes = (): Router => {
     UserController.patch
   );
 
+  router.get('/me/orders', validateTokenMiddleware, UserController.orders);
+
   router.delete(
     '/:uuid',
     validateTokenMiddleware,
