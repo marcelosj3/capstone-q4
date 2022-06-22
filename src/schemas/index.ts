@@ -1,16 +1,22 @@
 export { createAddressSchema, serializedAddressSchema } from './addresses';
 
+export { insertToCartSchema, serializedCartSchema } from './cart';
+
 export {
   createProductSchema,
-  customerProductSerializerSchema,
-  productToEmployeeSerializerSchema,
+  serializedCustomerProductSchema,
+  serializedEmployeeProductSchema,
   serializedProductSchema,
   updateProductSchema,
 } from './products';
 
-export { employeeProductStockSchema, productStockSchema } from './stocks';
+export { createStockSchema, serializedStockSchema } from './stocks';
 
-export { productSupplierSchema, supplierSerializerSchema } from './suppliers';
+export {
+  createSupplierSchema,
+  serializedSupplierSchema,
+  updateSupplierSchema,
+} from './suppliers';
 
 export {
   createUserSchema,

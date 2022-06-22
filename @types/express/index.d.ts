@@ -1,12 +1,12 @@
 import { User } from '../../src/entities';
-import { Validated } from '../../src/types';
+import { TValidated } from '../../src/types';
 
 declare global {
   namespace Express {
     interface Request {
       decoded: Pick<User, 'userId'> & JwtPayload;
       user: User;
-      validated: Validated;
+      validated: TValidated;
     }
   }
 }

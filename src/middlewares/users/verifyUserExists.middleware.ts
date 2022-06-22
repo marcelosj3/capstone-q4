@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from 'express';
 
 import { User } from '../../entities';
 import { AppError } from '../../errors';
+import { IUserCreate, IUserUpdate } from '../../interfaces';
 import { UserRepository } from '../../repositories';
 
 export const verifyUserExistsMiddleware = async (
@@ -9,8 +10,10 @@ export const verifyUserExistsMiddleware = async (
   _: Response,
   next: NextFunction
 ): Promise<void> => {
-  const userEmail = req.validated.email;
-  const userCpf = req.validated.cpf;
+  const validated = req.validated as IUserCreate | IUserUpdate;
+
+  const userEmail = validated.email;
+  const userCpf = validated.cpf;
 
   if (userEmail) {
     const foundUserEmail: User | null = await UserRepository.findOne({
@@ -24,7 +27,7 @@ export const verifyUserExistsMiddleware = async (
 
   if (userCpf) {
     const foundUserCpf: User | null = await UserRepository.findOne({
-      cpf: (req.validated as unknown as User).cpf,
+      cpf: (validated as unknown as User).cpf,
     });
 
     if (foundUserCpf) {

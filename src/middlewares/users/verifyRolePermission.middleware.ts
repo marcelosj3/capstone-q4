@@ -3,7 +3,7 @@ import { NextFunction, Request, Response } from 'express';
 import { AppError } from '../../errors';
 import { UserRepository } from '../../repositories';
 import { CompanyRole } from '../../types';
-import { verifyRolePermission } from '../../utils';
+import { verifyRolePermission } from '../../utils/users';
 
 /**
  * It verifies the permission each user has and set a resticrtion level

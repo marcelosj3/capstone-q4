@@ -5,16 +5,19 @@ import { sign } from 'jsonwebtoken';
 import { AppDataSource } from '../data-source';
 import { Address, User } from '../entities';
 import { AppError } from '../errors';
+import { IUserCreate, IUserLogin, IUserUpdate } from '../interfaces';
 import { UserRepository } from '../repositories';
 import { serializedUserSchema } from '../schemas';
 
 class UserService {
   create = async ({ validated }: Request) => {
-    const hasAddress: Address | undefined = validated.address || undefined;
+    const { address } = validated as IUserCreate;
+
+    const hasAddress: Address | undefined = address || undefined;
     let user: User;
 
     if (hasAddress) {
-      delete validated.address;
+      delete (validated as IUserCreate).address;
 
       user = await AppDataSource.transaction(async (entityManager) => {
         const user = entityManager.create(User, {
@@ -47,6 +50,8 @@ class UserService {
   };
 
   login = async ({ validated }: Request) => {
+    validated = validated as IUserLogin;
+
     const user = await UserRepository.findOneWithAddress({
       email: validated.email,
     });
@@ -85,6 +90,8 @@ class UserService {
   };
 
   patch = async ({ decoded, validated }: Request) => {
+    const { password, oldPassword } = validated as IUserUpdate;
+
     const user = await UserRepository.findOne({
       userId: decoded.id,
     });
@@ -99,7 +106,7 @@ class UserService {
       return { statusCode: 200, message: serializedUser };
     }
 
-    if (!!validated.password && !validated.oldPassword)
+    if (!!password && !oldPassword)
       throw new AppError(
         {
           error: 'Missing old password key',
@@ -109,12 +116,12 @@ class UserService {
         401
       );
 
-    if (!!validated.oldPassword) {
-      if (!(await compare(user.password, validated.oldPassword))) {
+    if (!!oldPassword) {
+      if (!(await compare(user.password, oldPassword))) {
         throw new AppError({ error: 'Invalid old password' }, 401);
       }
 
-      delete validated.oldPassword;
+      delete (validated as IUserUpdate).oldPassword;
     }
 
     await UserRepository.update(user.userId as string, {

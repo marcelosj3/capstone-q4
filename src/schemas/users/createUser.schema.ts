@@ -2,8 +2,12 @@ import { hashSync } from 'bcrypt';
 import { boolean, object, string, lazy, mixed } from 'yup';
 
 import { CompanyRole } from '../../types';
-import { companyRoleMatches, cpfMatches, emailFormat } from '../../utils';
-import { capitalizeText } from '../../utils/generics';
+import {
+  capitalizeText,
+  companyRoleMatches,
+  cpfMatches,
+  emailFormat,
+} from '../../utils';
 import { createAddressSchema } from '../addresses';
 
 export const createUserSchema = object().shape({
