@@ -120,6 +120,18 @@ class CartService {
 
     return { statusCode: 200, message: serializedCart };
   };
+
+  pay = async ({ decoded }: Request) => {
+    const { id } = decoded;
+
+    const user = await UserRepository.findOneWithCart({ userId: id });
+
+    if (!user) throw new AppError({ error: 'user not found' }, 404);
+
+    console.log(user);
+
+    return { statusCode: 200, message: {} };
+  };
 }
 
 export default new CartService();
