@@ -12,6 +12,7 @@ class ProductRepository {
   findOne = async (payload: object): Promise<Product | null> => {
     return await this.repo.findOne({ where: { ...payload } });
   };
+  get = async () => this.repo.find();
 }
 
 export default new ProductRepository();

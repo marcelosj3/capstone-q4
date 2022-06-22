@@ -3,7 +3,11 @@ import { Request } from 'express';
 import { AppDataSource } from '../data-source';
 import { Product, Stock, Supplier } from '../entities';
 import { IProductCreation } from '../interfaces/products';
-import supplierRepository from '../repositories/supplier.repository';
+import {
+  ProductRepository,
+  SupplierRepository,
+  UserRepository,
+} from '../repositories';
 import { serializedProductSchema } from '../schemas';
 
 class ProductService {
@@ -28,7 +32,7 @@ class ProductService {
         unityValueToSell,
         unityValueSupplier: unityValue,
       });
-      const supplierExists = await supplierRepository.findOne(supplier);
+      const supplierExists = await SupplierRepository.findOne(supplier);
       if (!supplierExists) {
         const supplierCreate = EntityManager.create(Supplier, { ...supplier });
         stock.supplier = supplierCreate;
@@ -48,6 +52,17 @@ class ProductService {
       statusCode: 201,
       message: serializedProduct,
     };
+  };
+  get = async ({ decoded }: Request) => {
+    const user = await UserRepository.findOne({
+      userId: decoded.id,
+    });
+    let product;
+    if (user?.isEmployee) {
+      product = await ProductRepository.get();
+      console.log(product);
+    }
+    return { statusCode: 200, message: product };
   };
 }
 
