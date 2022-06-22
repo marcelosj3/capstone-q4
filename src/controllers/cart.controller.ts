@@ -7,6 +7,11 @@ class CartController {
     const { statusCode, message } = await CartService.insertProduct(req);
     return res.status(statusCode).json(message);
   };
+
+  pay = async (req: Request, res: Response) => {
+    const { statusCode, message } = await CartService.pay(req);
+    return res.status(statusCode).json(message);
+  };
 }
 
 export default new CartController();

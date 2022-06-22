@@ -4,8 +4,8 @@ import { MigrationInterface, QueryRunner } from 'typeorm';
 
 config();
 
-export class createTable1655235938178 implements MigrationInterface {
-  name = 'createTable1655235938178';
+export class createTables1655873783127 implements MigrationInterface {
+  name = 'createTables1655873783127';
 
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(
@@ -18,7 +18,7 @@ export class createTable1655235938178 implements MigrationInterface {
       `CREATE TABLE "carts" ("cartId" uuid NOT NULL DEFAULT uuid_generate_v4(), "isPaid" boolean NOT NULL DEFAULT false, "totalPrice" double precision NOT NULL, "shippingFee" double precision NOT NULL, "userUserId" uuid, CONSTRAINT "PK_75eb343efb7459aad5dd7f8045c" PRIMARY KEY ("cartId"))`
     );
     await queryRunner.query(
-      `CREATE TABLE "cartProducts" ("cartProductsId" uuid NOT NULL DEFAULT uuid_generate_v4(), "quantity" integer NOT NULL, "cartCartId" uuid, "productProductId" uuid, CONSTRAINT "REL_c7e938b25c302c8631c65bf553" UNIQUE ("productProductId"), CONSTRAINT "PK_2c1ef135bd194de25684ea1046d" PRIMARY KEY ("cartProductsId"))`
+      `CREATE TABLE "cartProducts" ("cartProductsId" uuid NOT NULL DEFAULT uuid_generate_v4(), "quantity" integer NOT NULL, "cartCartId" uuid, "productProductId" uuid, CONSTRAINT "PK_2c1ef135bd194de25684ea1046d" PRIMARY KEY ("cartProductsId"))`
     );
     await queryRunner.query(
       `CREATE TABLE "products" ("productId" uuid NOT NULL DEFAULT uuid_generate_v4(), "name" character varying NOT NULL, "onSale" boolean NOT NULL DEFAULT false, "brand" character varying NOT NULL, "category" character varying NOT NULL, "description" character varying, "expiryDate" character varying, "stockStockId" uuid, CONSTRAINT "REL_5e89c6d53f4769aa019a787011" UNIQUE ("stockStockId"), CONSTRAINT "PK_7b3b507508cd0f86a5b2e923459" PRIMARY KEY ("productId"))`
@@ -27,7 +27,7 @@ export class createTable1655235938178 implements MigrationInterface {
       `CREATE TABLE "stocks" ("stockId" uuid NOT NULL DEFAULT uuid_generate_v4(), "quantity" integer NOT NULL, "unityValueSupplier" double precision NOT NULL, "increaseValuePercentage" integer NOT NULL DEFAULT '30', "isAvailable" boolean NOT NULL DEFAULT true, "unityValueToSell" double precision, "supplierSupplierId" uuid, CONSTRAINT "PK_17fe126989bcddf544ae0758fab" PRIMARY KEY ("stockId"))`
     );
     await queryRunner.query(
-      `CREATE TABLE "suppliers" ("supplierId" uuid NOT NULL DEFAULT uuid_generate_v4(), "name" character varying NOT NULL, "cnpj" character varying NOT NULL, "addressAddressId" uuid, CONSTRAINT "REL_137afdbe09840216a4ee1a7248" UNIQUE ("addressAddressId"), CONSTRAINT "PK_72715ca349897fe61381e321009" PRIMARY KEY ("supplierId"))`
+      `CREATE TABLE "suppliers" ("supplierId" uuid NOT NULL DEFAULT uuid_generate_v4(), "name" character varying NOT NULL, "cnpj" character varying NOT NULL, "addressAddressId" uuid, CONSTRAINT "UQ_fce20fe3509933fa1931ae7cdad" UNIQUE ("cnpj"), CONSTRAINT "REL_137afdbe09840216a4ee1a7248" UNIQUE ("addressAddressId"), CONSTRAINT "PK_72715ca349897fe61381e321009" PRIMARY KEY ("supplierId"))`
     );
     await queryRunner.query(
       `CREATE TABLE "addresses" ("addressId" uuid NOT NULL DEFAULT uuid_generate_v4(), "state" character varying NOT NULL, "city" character varying NOT NULL, "district" character varying NOT NULL, "street" character varying NOT NULL, "houseNumber" integer NOT NULL, "zipCode" character varying NOT NULL, "additionalAddressData" character varying, "isMain" boolean NOT NULL DEFAULT false, CONSTRAINT "PK_ff59275f5928941ce06f1d8890c" PRIMARY KEY ("addressId"))`
@@ -73,7 +73,7 @@ export class createTable1655235938178 implements MigrationInterface {
     );
     await queryRunner.query(
       `INSERT INTO "users" ("name", "email", "cpf", "password", "isActive", "isEmployee", "companyRole")
-              VALUES ('${process.env.ADMIN_NAME}','${
+                  VALUES ('${process.env.ADMIN_NAME}','${
         process.env.ADMIN_EMAIL
       }', '009.858.239-87', '${hashSync(
         process.env.ADMIN_PASSWORD as string,

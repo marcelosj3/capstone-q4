@@ -17,5 +17,7 @@ export const cartRoutes = (): Router => {
     CartController.insertProduct
   );
 
+  router.put('/pay', validateTokenMiddleware, CartController.pay);
+
   return router;
 };
