@@ -28,10 +28,7 @@ export const createUserSchema = object().shape({
     .default(CompanyRole.CLIENT)
     .optional(),
   address: lazy((value) => {
-    if (value !== undefined) {
-      return createAddressSchema;
-    }
-
+    if (value !== undefined) return createAddressSchema;
     return mixed().notRequired();
   }),
 });

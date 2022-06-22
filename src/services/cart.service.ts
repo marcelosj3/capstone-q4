@@ -1,7 +1,7 @@
 import { Request } from 'express';
 
 import { AppDataSource } from '../data-source';
-import { Cart, CartProduct } from '../entities';
+import { Cart, CartProduct, Order, Product, Stock } from '../entities';
 import { AppError } from '../errors';
 import { IInsertToCart } from '../interfaces';
 import {
@@ -97,9 +97,15 @@ class CartService {
         cartInfo.totalPrice = product.stock.unityValueToSell * quantity;
         cartInfo.cartProducts = [cartProduct];
         cartInfo.user = user;
+        cartInfo.shippingFee = 0;
 
         cart = await entityManager.save(Cart, cartInfo);
-
+        console.log('-'.repeat(50));
+        console.log(new Date().toLocaleTimeString());
+        console.log();
+        console.log(cartProduct);
+        console.log();
+        console.log('-'.repeat(50));
         cartProduct.cart = cart;
 
         cartProduct = await entityManager.save(CartProduct, cartProduct);
@@ -109,7 +115,7 @@ class CartService {
     }
 
     cart.totalPrice = reduceCartTotalPrice(cart);
-    cart.shippingFee = shippingFeeCalculator(cart);
+    cart.shippingFee = shippingFeeCalculator(cart) || 0;
 
     CartRepository.update(String(cart.cartId), {
       totalPrice: cart.totalPrice,
@@ -128,9 +134,54 @@ class CartService {
 
     if (!user) throw new AppError({ error: 'user not found' }, 404);
 
-    console.log(user);
+    const cart = user.cart.find((cart) => !cart.isPaid);
 
-    return { statusCode: 200, message: {} };
+    if (!cart || cart?.cartProducts.length == 0) {
+      throw new AppError({ error: 'cart is empty' }, 400);
+    }
+
+    const order: Order = await AppDataSource.transaction(
+      async (entityManager) => {
+        const order = entityManager.create(Order);
+        order.user = user;
+        order.cart = cart;
+
+        const { cartProducts } = cart;
+
+        cartProducts.forEach(async (cartProduct) => {
+          const {
+            quantity,
+            product: {
+              stock: { stockId },
+            },
+          } = cartProduct;
+
+          const stock = await entityManager.findOne(Stock, {
+            where: { stockId },
+          });
+
+          const productQuantity = stock!.quantity;
+          const newQuantity = productQuantity - quantity;
+
+          if (quantity > productQuantity)
+            throw new AppError(
+              {
+                error: `while you were shopping, one of your products went out of stock`,
+              },
+              401
+            );
+
+          await entityManager.update(Stock, stockId, {
+            quantity: newQuantity,
+          });
+        });
+
+        await entityManager.update(Cart, cart.cartId, { isPaid: true });
+        return await entityManager.save(order);
+      }
+    );
+
+    return { statusCode: 200, message: order };
   };
 }
 

@@ -2,6 +2,7 @@ import {
   Column,
   Entity,
   JoinColumn,
+  ManyToMany,
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
@@ -32,7 +33,7 @@ export class Product {
   @Column({ nullable: true })
   expiryDate: string;
 
-  @OneToOne(() => CartProduct, (cartProduct) => cartProduct.product)
+  @ManyToMany(() => CartProduct, (cartProduct) => cartProduct.product)
   cartProduct: CartProduct;
 
   @OneToOne(() => Stock, (stock) => stock.product)
