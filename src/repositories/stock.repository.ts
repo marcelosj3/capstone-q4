@@ -14,6 +14,7 @@ class StockRepository {
   findOne = async (payload: object): Promise<Stock | null> => {
     return await this.repo.findOne({ where: { ...payload } });
   };
+  get = async () => await this.repo.find();
 }
 
 export default new StockRepository();

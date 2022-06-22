@@ -1,10 +1,6 @@
 export { zipCodeMatches } from './addresses/';
 export { validateToken } from './auth/';
-export {
-  cartToSerialize,
-  reduceCartTotalPrice,
-  shippingFeeCalculator,
-} from './cart/';
+
 export { yupErrorsMessage } from './errors/';
 export { capitalizeText } from './generics/';
 export { expiryDateMatches } from './products/';
@@ -15,3 +11,8 @@ export {
   emailFormat,
   verifyRolePermission,
 } from './users/';
+export {
+  cartToSerialize,
+  reduceCartTotalPrice,
+  shippingFeeCalculator,
+} from './cart/';

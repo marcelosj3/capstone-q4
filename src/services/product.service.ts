@@ -56,12 +56,122 @@ class ProductService {
     const user = await UserRepository.findOne({
       userId: decoded.id,
     });
-    let product;
+    let products;
+    let productsToSerealize: Array<any> = [];
     if (user?.isEmployee) {
-      product = await ProductRepository.get();
-      console.log(product);
+      products = await ProductRepository.get();
+      const toUniqueProducts = products.map(
+        ({ name, brand, category, expiryDate }) => {
+          return `${name}-${brand}-${category}-${expiryDate}`;
+        }
+      );
+      const uniqueProducts = [...new Set(toUniqueProducts)];
+      for (let i = 0; i < uniqueProducts.length; i++) {
+        const [name, brand, category, expiryDate] =
+          uniqueProducts[i].split('-');
+        const stockProduct: Array<any> = [];
+        const product = await ProductRepository.findOne({
+          name,
+          brand,
+          category,
+          expiryDate,
+        });
+        const productStock = await ProductRepository.findBy({
+          name,
+          brand,
+          category,
+          expiryDate,
+        });
+        productStock.forEach((product) => stockProduct.push(product.stock));
+        const totalQuantity = productStock.reduce(
+          (acc, { stock: { quantity } }) => acc + quantity,
+          0
+        );
+        const maxValueToSell = productStock.reduce(
+          (acc, { stock: { unityValueToSell } }) =>
+            Math.max(acc, unityValueToSell),
+          0
+        );
+        stockProduct.forEach((stockSupplier) => {
+          stockSupplier.productId = product?.productId;
+          stockSupplier.supplierName = stockSupplier.supplier.name;
+          stockSupplier.supplierCNPJ = stockSupplier.supplier.cnpj;
+          delete stockSupplier.supplier;
+          delete stockSupplier.increaseValuePercentage;
+          delete stockSupplier.unityValueSupplier;
+        });
+        const result = {
+          name: product?.name,
+          brand: product?.brand,
+          category: product?.category,
+          description: product?.description,
+          expiryDate: product?.expiryDate,
+          quantity: totalQuantity,
+          unityValueToSell: maxValueToSell,
+          onSale: product?.onSale,
+          stock: stockProduct,
+        };
+        productsToSerealize.push(result);
+      }
+    } else {
+      products = await ProductRepository.get();
+      const toUniqueProducts = products.map(
+        ({ name, brand, category, expiryDate }) => {
+          return `${name}-${brand}-${category}-${expiryDate}`;
+        }
+      );
+      const uniqueProducts = [...new Set(toUniqueProducts)];
+      for (let i = 0; i < uniqueProducts.length; i++) {
+        const [name, brand, category, expiryDate] =
+          uniqueProducts[i].split('-');
+        const stockProduct: Array<any> = [];
+        const product = await ProductRepository.findOne({
+          name,
+          brand,
+          category,
+          expiryDate,
+        });
+        const productStock = await ProductRepository.findBy({
+          name,
+          brand,
+          category,
+          expiryDate,
+        });
+        productStock.forEach((product) => stockProduct.push(product.stock));
+        const totalQuantity = productStock.reduce(
+          (acc, { stock: { quantity } }) => acc + quantity,
+          0
+        );
+        const maxValueToSell = productStock.reduce(
+          (acc, { stock: { unityValueToSell } }) =>
+            Math.max(acc, unityValueToSell),
+          0
+        );
+        let available = totalQuantity > 0 ? true : false;
+        console.log(available);
+        stockProduct.forEach((stockSupplier) => {
+          stockSupplier.productId = product?.productId;
+          delete stockSupplier.supplier;
+          delete stockSupplier.increaseValuePercentage;
+          delete stockSupplier.unityValueSupplier;
+          delete stockSupplier.unityValueToSell;
+        });
+        const result = {
+          name: product?.name,
+          brand: product?.brand,
+          category: product?.category,
+          description: product?.description,
+          expiryDate: product?.expiryDate,
+          quantity: totalQuantity,
+          unityValueToSell: maxValueToSell,
+          onSale: product?.onSale,
+          isAvailable: available,
+          stock: stockProduct,
+        };
+        productsToSerealize.push(result);
+      }
     }
-    return { statusCode: 200, message: product };
+    return { statusCode: 200, message: productsToSerealize };
   };
 }
 
