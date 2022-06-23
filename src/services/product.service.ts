@@ -9,7 +9,12 @@ import {
   UserRepository,
 } from '../repositories';
 import { serializedProductSchema } from '../schemas';
-import { quantityReducer } from '../utils/products';
+import {
+  getProductsUtil,
+  maxValueToSellUtil,
+  quantityReducer,
+  uniqueProductsUtil,
+} from '../utils/products';
 
 class ProductService {
   create = async ({ validated }: Request) => {
@@ -23,15 +28,17 @@ class ProductService {
     } = validated as IProductCreation;
 
     const productFound = await ProductRepository.findOneWithStock(productInfo);
-
+    //Nao atualiza o valor e dessa maneira é como se todos possuissem o mesmo valor do primeiro registrado
     if (productFound && productFound.stock.supplier.cnpj === supplier.cnpj) {
       product = await AppDataSource.transaction(async (entityManager) => {
         const { stock } = productFound;
 
         const newQuantity = stock.quantity + quantity;
+        const newUnityValue = stock.unityValueToSell + unityValue;
 
         await entityManager.update(Stock, stock.stockId, {
           quantity: newQuantity,
+          unityValueToSell: newUnityValue,
         });
 
         const product = await entityManager.findOne(Product, {
@@ -87,44 +94,35 @@ class ProductService {
       message: serializedProduct,
     };
   };
+
   get = async ({ decoded }: Request) => {
     const user = await UserRepository.findOne({
       userId: decoded.id,
     });
-    let products;
+
+    let products: Array<Product>;
+
     let productsToSerealize: Array<any> = [];
+
     if (user?.isEmployee) {
       products = await ProductRepository.get();
-      const toUniqueProducts = products.map(
-        ({ name, brand, category, expiryDate }) => {
-          return `${name}-${brand}-${category}-${expiryDate}`;
-        }
-      );
-      const uniqueProducts = [...new Set(toUniqueProducts)];
+
+      const uniqueProducts = uniqueProductsUtil(products);
+
       for (let i = 0; i < uniqueProducts.length; i++) {
-        const [name, brand, category, expiryDate] =
-          uniqueProducts[i].split('-');
         const stockProduct: Array<any> = [];
-        const product = await ProductRepository.findOne({
-          name,
-          brand,
-          category,
-          expiryDate,
-        });
-        const productStock = await ProductRepository.findBy({
-          name,
-          brand,
-          category,
-          expiryDate,
-        });
-        productStock.forEach((product) => stockProduct.push(product.stock));
-        const totalQuantity = quantityReducer(productStock);
-        const maxValueToSell = productStock.reduce(
-          (acc, { stock: { unityValueToSell } }) =>
-            Math.max(acc, unityValueToSell),
-          0
+
+        const { product, productStock } = await getProductsUtil(
+          uniqueProducts,
+          i
         );
-        console.log();
+
+        productStock.forEach((product) => stockProduct.push(product.stock));
+
+        const totalQuantity = quantityReducer(productStock);
+
+        const maxValueToSell = maxValueToSellUtil(productStock);
+
         stockProduct.forEach((stockSupplier) => {
           stockSupplier.productId = product?.productId;
           stockSupplier.supplierName = stockSupplier.supplier.name;
@@ -133,6 +131,7 @@ class ProductService {
           delete stockSupplier.increaseValuePercentage;
           delete stockSupplier.unityValueSupplier;
         });
+
         const result = {
           name: product?.name,
           brand: product?.brand,
@@ -144,44 +143,30 @@ class ProductService {
           onSale: product?.onSale,
           stock: stockProduct,
         };
+
         productsToSerealize.push(result);
       }
     } else {
       products = await ProductRepository.get();
-      const toUniqueProducts = products.map(
-        ({ name, brand, category, expiryDate }) => {
-          return `${name}-${brand}-${category}-${expiryDate}`;
-        }
-      );
-      const uniqueProducts = [...new Set(toUniqueProducts)];
+
+      const uniqueProducts = uniqueProductsUtil(products);
+
       for (let i = 0; i < uniqueProducts.length; i++) {
-        const [name, brand, category, expiryDate] =
-          uniqueProducts[i].split('-');
         const stockProduct: Array<any> = [];
-        const product = await ProductRepository.findOne({
-          name,
-          brand,
-          category,
-          expiryDate,
-        });
-        const productStock = await ProductRepository.findBy({
-          name,
-          brand,
-          category,
-          expiryDate,
-        });
+
+        const { product, productStock } = await getProductsUtil(
+          uniqueProducts,
+          i
+        );
+
         productStock.forEach((product) => stockProduct.push(product.stock));
+
         const totalQuantity = quantityReducer(productStock);
 
-        console.log();
+        const maxValueToSell = maxValueToSellUtil(productStock);
 
-        const maxValueToSell = productStock.reduce(
-          (acc, { stock: { unityValueToSell } }) =>
-            Math.max(acc, unityValueToSell),
-          0
-        );
         let available = totalQuantity > 0 ? true : false;
-        console.log(available);
+
         stockProduct.forEach((stockSupplier) => {
           stockSupplier.productId = product?.productId;
           delete stockSupplier.supplier;
@@ -189,6 +174,7 @@ class ProductService {
           delete stockSupplier.unityValueSupplier;
           delete stockSupplier.unityValueToSell;
         });
+
         const result = {
           name: product?.name,
           brand: product?.brand,
@@ -201,6 +187,7 @@ class ProductService {
           isAvailable: available,
           stock: stockProduct,
         };
+
         productsToSerealize.push(result);
       }
     }
