@@ -9,12 +9,27 @@ class UserController {
   };
 
   login = async (req: Request, res: Response) => {
-    const { status, message } = await UserService.login(req);
-    return res.status(status).json(message);
+    const { statusCode, message } = await UserService.login(req);
+    return res.status(statusCode).json(message);
   };
 
   getAll = async (_: Request, res: Response) => {
     const { statusCode, message } = await UserService.getAll();
+    return res.status(statusCode).json(message);
+  };
+
+  patch = async (req: Request, res: Response) => {
+    const { statusCode, message } = await UserService.patch(req);
+    return res.status(statusCode).json(message);
+  };
+
+  delete = async (req: Request, res: Response) => {
+    const { statusCode } = await UserService.delete(req);
+    return res.status(statusCode).send();
+  };
+
+  orders = async (req: Request, res: Response) => {
+    const { statusCode, message } = await UserService.orders(req);
     return res.status(statusCode).json(message);
   };
 }

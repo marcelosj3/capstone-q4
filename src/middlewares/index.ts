@@ -1,4 +1,13 @@
-export { errorMiddleware } from './errors/error.middleware';
-export { validateSchemaMiddleware } from './validateSchema.middleware';
-export { validateTokenMiddleware } from './validateToken.middleware';
-export { verifyUserExistsMiddleware } from './verifyUserExists.middleware';
+export { validateTokenMiddleware } from './auth';
+
+export { errorMiddleware } from './errors';
+
+export { validateSchemaMiddleware } from './schema';
+
+export {
+  getUserByIdOr404Middleware,
+  verifyForKeyInBodyAndValidateToken,
+  verifyRoleMiddleware,
+  verifyRolePermissionMiddleware,
+  verifyUserExistsMiddleware,
+} from './users';

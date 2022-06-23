@@ -1,11 +1,12 @@
 import { User } from '../../src/entities';
-import { IUserAddressCreation } from '../../src/interfaces/users';
+import { TValidated } from '../../src/types';
 
 declare global {
   namespace Express {
     interface Request {
       decoded: Pick<User, 'userId'> & JwtPayload;
-      validated: IUserAddressCreation;
+      user: User;
+      validated: TValidated;
     }
   }
 }

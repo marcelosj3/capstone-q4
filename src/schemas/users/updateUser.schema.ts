@@ -1,22 +1,31 @@
 import { hashSync } from 'bcrypt';
 import { boolean, object, string } from 'yup';
 
-import { CompanyRole } from '../../entities';
-import { cpfMatches } from '../../utils';
+import { CompanyRole } from '../../types';
+import { companyRoleMatches, cpfMatches, emailFormat } from '../../utils/';
+import { capitalizeText } from '../../utils/generics/capitalizeText.util';
 
 export const updateUserSchema = object().shape({
-  name: string().nullable().notRequired(),
-  email: string().email().lowercase().nullable().notRequired(),
+  name: string()
+    .notRequired()
+    .transform((name: string) => capitalizeText(name)),
+  email: string()
+    .email(emailFormat.message)
+    .lowercase()
+    .nullable()
+    .notRequired(),
   cpf: string()
     .matches(cpfMatches.regex, cpfMatches.message)
     .nullable()
     .notRequired(),
   password: string()
-    .min(6, 'At least 6 characters required')
     .transform((pwd: string) => hashSync(pwd, 8))
     .nullable()
     .notRequired(),
+  oldPassword: string().notRequired(),
   isActive: boolean().notRequired(),
   isEmployee: boolean().notRequired(),
-  companyRole: string().oneOf(Object.values(CompanyRole)).notRequired(),
+  companyRole: string()
+    .oneOf(Object.values(CompanyRole), companyRoleMatches.message)
+    .notRequired(),
 });

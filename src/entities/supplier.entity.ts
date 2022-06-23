@@ -18,7 +18,7 @@ export class Supplier {
   @Column()
   name: string;
 
-  @Column()
+  @Column({ unique: true })
   cnpj: string;
 
   @OneToMany(() => Stock, (stock) => stock.supplier)

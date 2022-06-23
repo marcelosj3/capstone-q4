@@ -8,16 +8,10 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
+import { CompanyRole } from '../types/users';
 import { Address } from './address.entity';
 import { Cart } from './cart.entity';
 import { Order } from './order.entity';
-
-export enum CompanyRole {
-  ADMIN = 'admin',
-  MANAGER = 'manager',
-  EMPLOYEE = 'employee',
-  CLIENT = 'client',
-}
 
 @Entity('users')
 export class User {
@@ -49,7 +43,7 @@ export class User {
   @JoinTable()
   address: Address[];
 
-  @OneToMany(() => Order, (order) => order.user, { lazy: true })
+  @OneToMany(() => Order, (order) => order.user, { eager: true })
   orders: Order[];
 
   @OneToMany(() => Cart, (cart) => cart.user)
