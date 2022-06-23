@@ -6,7 +6,13 @@ export { yupErrorsMessage } from './errors/';
 
 export { capitalizeText } from './generics/';
 
-export { expiryDateMatches } from './products/';
+export {
+  expiryDateMatches,
+  getProductsUtil,
+  maxValueToSellUtil,
+  quantityReducer,
+  uniqueProductsUtil,
+} from './products/';
 
 export { cnpjMatches } from './suppliers/';
 

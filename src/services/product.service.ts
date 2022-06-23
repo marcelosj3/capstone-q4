@@ -15,7 +15,7 @@ import {
   maxValueToSellUtil,
   quantityReducer,
   uniqueProductsUtil,
-} from '../utils/products';
+} from '../utils';
 
 class ProductService {
   create = async ({ validated }: Request) => {
