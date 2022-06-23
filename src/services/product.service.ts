@@ -9,6 +9,7 @@ import {
   UserRepository,
 } from '../repositories';
 import { serializedProductSchema } from '../schemas';
+import { quantityReducer } from '../utils/products';
 
 class ProductService {
   create = async ({ validated }: Request) => {
@@ -117,15 +118,13 @@ class ProductService {
           expiryDate,
         });
         productStock.forEach((product) => stockProduct.push(product.stock));
-        const totalQuantity = productStock.reduce(
-          (acc, { stock: { quantity } }) => acc + quantity,
-          0
-        );
+        const totalQuantity = quantityReducer(productStock);
         const maxValueToSell = productStock.reduce(
           (acc, { stock: { unityValueToSell } }) =>
             Math.max(acc, unityValueToSell),
           0
         );
+        console.log();
         stockProduct.forEach((stockSupplier) => {
           stockSupplier.productId = product?.productId;
           stockSupplier.supplierName = stockSupplier.supplier.name;
@@ -172,10 +171,10 @@ class ProductService {
           expiryDate,
         });
         productStock.forEach((product) => stockProduct.push(product.stock));
-        const totalQuantity = productStock.reduce(
-          (acc, { stock: { quantity } }) => acc + quantity,
-          0
-        );
+        const totalQuantity = quantityReducer(productStock);
+
+        console.log();
+
         const maxValueToSell = productStock.reduce(
           (acc, { stock: { unityValueToSell } }) =>
             Math.max(acc, unityValueToSell),

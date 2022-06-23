@@ -1,4 +1,4 @@
-import { object, string, lazy, mixed } from 'yup';
+import { lazy, mixed, object, string } from 'yup';
 
 import { cnpjMatches } from '../../utils';
 import { createAddressSchema } from '../addresses';
