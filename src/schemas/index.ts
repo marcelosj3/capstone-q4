@@ -6,10 +6,9 @@ export { serializedOrderSchema } from './orders';
 
 export {
   createProductSchema,
-  serializedCustomerProductSchema,
-  serializedEmployeeProductSchema,
   serializedProductSchema,
   updateProductSchema,
+  serializedGetProductSchema,
 } from './products';
 
 export { createStockSchema, serializedStockSchema } from './stocks';

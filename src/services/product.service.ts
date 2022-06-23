@@ -3,8 +3,19 @@ import { Request } from 'express';
 import { AppDataSource } from '../data-source';
 import { Product, Stock, Supplier } from '../entities';
 import { IProductCreation } from '../interfaces';
-import { ProductRepository, SupplierRepository } from '../repositories';
+import {
+  ProductRepository,
+  SupplierRepository,
+  UserRepository,
+} from '../repositories';
 import { serializedProductSchema } from '../schemas';
+import { serializedGetProductSchema } from '../schemas/products';
+import {
+  getProductsUtil,
+  maxValueToSellUtil,
+  quantityReducer,
+  uniqueProductsUtil,
+} from '../utils';
 
 class ProductService {
   create = async ({ validated }: Request) => {
@@ -18,15 +29,17 @@ class ProductService {
     } = validated as IProductCreation;
 
     const productFound = await ProductRepository.findOneWithStock(productInfo);
-
     if (productFound && productFound.stock.supplier.cnpj === supplier.cnpj) {
       product = await AppDataSource.transaction(async (entityManager) => {
         const { stock } = productFound;
 
         const newQuantity = stock.quantity + quantity;
+        const newUnityValue =
+          stock.unityValueToSell + (stock.unityValueToSell - unityValue) / 2;
 
         await entityManager.update(Stock, stock.stockId, {
           quantity: newQuantity,
+          unityValueToSell: newUnityValue,
         });
 
         const product = await entityManager.findOne(Product, {
@@ -81,6 +94,108 @@ class ProductService {
       statusCode: 201,
       message: serializedProduct,
     };
+  };
+
+  get = async ({ decoded }: Request) => {
+    const user = await UserRepository.findOne({
+      userId: decoded.id,
+    });
+
+    let products: Array<Product>;
+
+    let productsToSerialize: Array<any> = [];
+
+    if (user?.isEmployee) {
+      products = await ProductRepository.get();
+
+      const uniqueProducts = uniqueProductsUtil(products);
+
+      for (let i = 0; i < uniqueProducts.length; i++) {
+        const stockProduct: Array<any> = [];
+
+        const { product, productStock } = await getProductsUtil(
+          uniqueProducts,
+          i
+        );
+
+        productStock.forEach((product) => stockProduct.push(product.stock));
+
+        const totalQuantity = quantityReducer(productStock);
+
+        const maxValueToSell = maxValueToSellUtil(productStock);
+
+        stockProduct.forEach((stockSupplier) => {
+          stockSupplier.productId = product?.productId;
+          stockSupplier.supplierName = stockSupplier.supplier.name;
+          stockSupplier.supplierCNPJ = stockSupplier.supplier.cnpj;
+          delete stockSupplier.supplier;
+          delete stockSupplier.increaseValuePercentage;
+          delete stockSupplier.unityValueSupplier;
+        });
+
+        const result = {
+          name: product?.name,
+          brand: product?.brand,
+          category: product?.category,
+          description: product?.description,
+          expiryDate: product?.expiryDate,
+          quantity: totalQuantity,
+          unityValueToSell: maxValueToSell,
+          onSale: product?.onSale,
+          stock: stockProduct,
+        };
+
+        productsToSerialize.push(result);
+      }
+    } else {
+      products = await ProductRepository.get();
+
+      const uniqueProducts = uniqueProductsUtil(products);
+
+      for (let i = 0; i < uniqueProducts.length; i++) {
+        const stockProduct: Array<any> = [];
+
+        const { product, productStock } = await getProductsUtil(
+          uniqueProducts,
+          i
+        );
+
+        productStock.forEach((product) => stockProduct.push(product.stock));
+
+        const totalQuantity = quantityReducer(productStock);
+
+        const maxValueToSell = maxValueToSellUtil(productStock);
+
+        let available = totalQuantity > 0 ? true : false;
+
+        stockProduct.forEach((stockSupplier) => {
+          stockSupplier.productId = product?.productId;
+          delete stockSupplier.supplier;
+          delete stockSupplier.increaseValuePercentage;
+          delete stockSupplier.unityValueSupplier;
+          delete stockSupplier.unityValueToSell;
+        });
+
+        const result = {
+          name: product?.name,
+          brand: product?.brand,
+          category: product?.category,
+          description: product?.description,
+          expiryDate: product?.expiryDate,
+          quantity: totalQuantity,
+          unityValueToSell: maxValueToSell,
+          onSale: product?.onSale,
+          isAvailable: available,
+          stock: stockProduct,
+        };
+
+        productsToSerialize.push(result);
+      }
+    }
+    const validateSchema = await serializedGetProductSchema.validate(
+      productsToSerialize
+    );
+    return { statusCode: 200, message: validateSchema };
   };
 }
 

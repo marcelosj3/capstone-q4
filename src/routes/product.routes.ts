@@ -19,5 +19,6 @@ export const productRoutes = (): Router => {
     verifyRoleMiddleware(CompanyRole.MANAGER),
     ProductController.create
   );
+  router.get('', validateTokenMiddleware, ProductController.get);
   return router;
 };

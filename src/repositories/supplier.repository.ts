@@ -13,6 +13,7 @@ class SupplierRepository {
   findOne = async (payload: object): Promise<Supplier | null> => {
     return await this.repo.findOne({ where: { ...payload } });
   };
+  get = async () => await this.repo.find();
 }
 
 export default new SupplierRepository();

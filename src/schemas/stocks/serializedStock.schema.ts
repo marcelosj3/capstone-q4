@@ -8,5 +8,6 @@ export const serializedStockSchema = object().shape({
   isAvailable: boolean(),
   quantity: number().integer(),
   unityValueToSell: number(),
-  supplier: serializedSupplierSchema,
+  productId: string().uuid(),
+  // supplier: serializedSupplierSchema,
 });

@@ -13,6 +13,14 @@ class ProductRepository {
   findOne = async (payload: object): Promise<Product | null> => {
     return await this.repo.findOne({ where: { ...payload } });
   };
+  findOneClient = async (payload: object): Promise<Product | null> =>
+    this.repo.findOne({ where: { ...payload }, relations: ['stock'] });
+  get = async () => this.repo.find({ relations: ['stock', 'stock.supplier'] });
+  findBy = async (payload: object) =>
+    await this.repo.find({
+      where: { ...payload },
+      relations: ['stock', 'stock.supplier'],
+    });
 
   findOneWithStock = async (payload: object): Promise<Product | null> => {
     return await this.repo.findOne({
