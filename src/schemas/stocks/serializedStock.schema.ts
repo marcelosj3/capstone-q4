@@ -1,4 +1,5 @@
-import { boolean, number, object, string } from 'yup';
+import { mixed } from 'yup';
+import { boolean, lazy, number, object, string } from 'yup';
 
 import { serializedSupplierSchema } from '../suppliers';
 
@@ -9,5 +10,8 @@ export const serializedStockSchema = object().shape({
   quantity: number().integer(),
   unityValueToSell: number(),
   productId: string().uuid(),
-  // supplier: serializedSupplierSchema,
+  supplier: lazy((value) => {
+    if (value !== undefined) return serializedSupplierSchema;
+    return mixed().notRequired();
+  }),
 });
