@@ -9,6 +9,7 @@ import {
   UserRepository,
 } from '../repositories';
 import { serializedProductSchema } from '../schemas';
+import { serializedGetProductSchema } from '../schemas/products';
 import {
   getProductsUtil,
   maxValueToSellUtil,
@@ -28,13 +29,13 @@ class ProductService {
     } = validated as IProductCreation;
 
     const productFound = await ProductRepository.findOneWithStock(productInfo);
-    //Nao atualiza o valor e dessa maneira é como se todos possuissem o mesmo valor do primeiro registrado
     if (productFound && productFound.stock.supplier.cnpj === supplier.cnpj) {
       product = await AppDataSource.transaction(async (entityManager) => {
         const { stock } = productFound;
 
         const newQuantity = stock.quantity + quantity;
-        const newUnityValue = stock.unityValueToSell + unityValue;
+        const newUnityValue =
+          stock.unityValueToSell + (stock.unityValueToSell - unityValue) / 2;
 
         await entityManager.update(Stock, stock.stockId, {
           quantity: newQuantity,
@@ -102,7 +103,7 @@ class ProductService {
 
     let products: Array<Product>;
 
-    let productsToSerealize: Array<any> = [];
+    let productsToSerialize: Array<any> = [];
 
     if (user?.isEmployee) {
       products = await ProductRepository.get();
@@ -144,7 +145,7 @@ class ProductService {
           stock: stockProduct,
         };
 
-        productsToSerealize.push(result);
+        productsToSerialize.push(result);
       }
     } else {
       products = await ProductRepository.get();
@@ -188,10 +189,13 @@ class ProductService {
           stock: stockProduct,
         };
 
-        productsToSerealize.push(result);
+        productsToSerialize.push(result);
       }
     }
-    return { statusCode: 200, message: productsToSerealize };
+    const validateSchema = await serializedGetProductSchema.validate(
+      productsToSerialize
+    );
+    return { statusCode: 200, message: validateSchema };
   };
 }
 
