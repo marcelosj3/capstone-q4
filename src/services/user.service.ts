@@ -14,6 +14,8 @@ class UserService {
   create = async ({ validated }: Request) => {
     const { address } = validated as IUserCreate;
 
+    // NEW TEST
+
     const hasAddress: Address | undefined = address || undefined;
     let user: User;
 
